@@ -1,0 +1,109 @@
+2025-10-02 22:38:23:3823 [32minfo[39m: [32mServer is running on port 3000[39m
+2025-10-02 22:38:42:3842 [31merror[39m: [31mError in getAllEventsController: [39m
+[31mInvalid `this.prisma.events.findMany()` invocation in[39m
+[31mC:\Users\ammer\Documents\OELAN\FrontRow\backend\src\repositories\EventRepositoryImpl.ts:106:37[39m
+
+[31m  103  * @returns A promise that resolves to an array of events[39m
+[31m  104  */[39m
+[31m  105 async findAllByDate(): Promise<Events[]> {[39m
+[31m→ 106   return await this.prisma.events.findMany([39m
+[31mCan't reach database server at `localhost:54321`[39m
+
+[31mPlease make sure your database server is running at `localhost:54321`.[39m
+2025-10-02 22:38:46:3846 [31merror[39m: [31mError in getAllEventsController: [39m
+[31mInvalid `this.prisma.events.findMany()` invocation in[39m
+[31mC:\Users\ammer\Documents\OELAN\FrontRow\backend\src\repositories\EventRepositoryImpl.ts:106:37[39m
+
+[31m  103  * @returns A promise that resolves to an array of events[39m
+[31m  104  */[39m
+[31m  105 async findAllByDate(): Promise<Events[]> {[39m
+[31m→ 106   return await this.prisma.events.findMany([39m
+[31mCan't reach database server at `localhost:54321`[39m
+
+[31mPlease make sure your database server is running at `localhost:54321`.[39m
+2025-10-02 22:39:05:395 [32minfo[39m: [32mSuccessfully retrieved all events[39m
+2025-10-02 22:39:05:395 [32minfo[39m: [32mSuccessfully retrieved all events[39m
+2025-10-03 11:53:36:5336 [32minfo[39m: [32mServer is running on port 3000[39m
+2025-10-03 13:24:51:2451 [32minfo[39m: [32mSuccessfully retrieved all events[39m
+2025-10-03 13:24:51:2451 [32minfo[39m: [32mSuccessfully retrieved all events[39m
+2025-10-03 13:25:09:259 [32minfo[39m: [32mSuccessfully searched events with term: Hollywood[39m
+2025-10-03 13:25:11:2511 [32minfo[39m: [32mSuccessfully retrieved all events[39m
+2025-10-03 13:25:22:2522 [32minfo[39m: [32mSuccessfully retrieved all events[39m
+2025-10-03 13:25:23:2523 [32minfo[39m: [32mSuccessfully retrieved all events[39m
+2025-10-03 14:46:17:4617 [32minfo[39m: [32mSuccessfully retrieved all events[39m
+2025-10-03 14:46:18:4618 [32minfo[39m: [32mSuccessfully retrieved all events[39m
+2025-10-03 14:47:32:4732 [32minfo[39m: [32mSuccessfully retrieved event with ID: 7160fbcc-1b8f-4126-b0f0-38533f87806e[39m
+2025-10-03 14:47:32:4732 [32minfo[39m: [32mSuccessfully retrieved event with ID: 7160fbcc-1b8f-4126-b0f0-38533f87806e[39m
+2025-10-03 14:47:59:4759 [32minfo[39m: [32mSuccessfully retrieved all events[39m
+2025-10-03 14:48:00:480 [32minfo[39m: [32mSuccessfully retrieved all events[39m
+2025-10-03 14:48:08:488 [32minfo[39m: [32mSuccessfully retrieved event with ID: 7160fbcc-1b8f-4126-b0f0-38533f87806e[39m
+2025-10-03 14:48:08:488 [32minfo[39m: [32mSuccessfully retrieved event with ID: 7160fbcc-1b8f-4126-b0f0-38533f87806e[39m
+2025-10-03 14:48:14:4814 [32minfo[39m: [32mSuccessfully retrieved event with ID: 7160fbcc-1b8f-4126-b0f0-38533f87806e[39m
+2025-10-03 14:48:14:4814 [32minfo[39m: [32mSuccessfully retrieved event with ID: 7160fbcc-1b8f-4126-b0f0-38533f87806e[39m
+2025-10-03 14:48:32:4832 [32minfo[39m: [32mSuccessfully processed ticket purchase for event 7160fbcc-1b8f-4126-b0f0-38533f87806e by user 67ad2827-4cf5-4f96-926c-9d1d6c85ee4d[39m
+2025-10-03 14:49:17:4917 [32minfo[39m: [32mSuccessfully retrieved all events[39m
+2025-10-03 14:49:17:4917 [32minfo[39m: [32mSuccessfully retrieved all events[39m
+2025-10-03 14:50:10:5010 [32minfo[39m: [32mUser registered successfully: test@test.test[39m
+2025-10-03 14:50:10:5010 [32minfo[39m: [32mSuccessfully retrieved all events[39m
+2025-10-03 14:50:11:5011 [32minfo[39m: [32mSuccessfully retrieved all events[39m
+2025-10-03 14:50:25:5025 [32minfo[39m: [32mSuccessfully retrieved all events[39m
+2025-10-03 14:50:25:5025 [32minfo[39m: [32mSuccessfully retrieved all events[39m
+2025-10-03 14:50:35:5035 [32minfo[39m: [32mSuccessfully searched events with term: Hollywood[39m
+2025-10-03 14:50:35:5035 [32minfo[39m: [32mSuccessfully searched events with term: Hollywood[39m
+2025-10-03 14:50:42:5042 [32minfo[39m: [32mSuccessfully retrieved all events[39m
+2025-10-03 14:50:42:5042 [32minfo[39m: [32mSuccessfully retrieved all events[39m
+2025-10-03 14:51:12:5112 [32minfo[39m: [32mEvent created successfully: Hollywood party[39m
+2025-10-03 14:51:12:5112 [32minfo[39m: [32mSuccessfully retrieved all events[39m
+2025-10-03 14:51:13:5113 [32minfo[39m: [32mSuccessfully retrieved all events[39m
+2025-10-03 14:51:18:5118 [32minfo[39m: [32mSuccessfully searched events with term: hollywood[39m
+2025-10-03 14:51:23:5123 [32minfo[39m: [32mSuccessfully retrieved all events[39m
+2025-10-03 14:51:48:5148 [32minfo[39m: [32mSuccessfully retrieved sales overview data[39m
+2025-10-03 14:51:48:5148 [32minfo[39m: [32mSuccessfully retrieved sales overview data[39m
+2025-10-03 14:51:48:5148 [32minfo[39m: [32mSuccessfully retrieved sales overview data[39m
+2025-10-03 14:51:48:5148 [32minfo[39m: [32mSuccessfully retrieved sales overview data[39m
+2025-10-03 14:52:22:5222 [32minfo[39m: [32mSuccessfully retrieved user purchase report data[39m
+2025-10-03 22:32:00:320 [32minfo[39m: [32mSuccessfully retrieved all events[39m
+2025-10-03 22:32:01:321 [32minfo[39m: [32mSuccessfully retrieved all events[39m
+2025-10-10 15:33:11:3311 [32minfo[39m: [32mServer is running on port 3000[39m
+2025-10-10 15:33:33:3333 [35mhttp[39m: [35m[1760106813947-273081] GET /api/v1/docs/json - Request started[39m
+2025-10-10 15:33:33:3333 [35mhttp[39m: [35m[1760106813947-273081] GET /json - Response status: 200[39m
+2025-10-10 15:33:57:3357 [32minfo[39m: [32mServer is running on port 3000[39m
+2025-10-10 15:34:16:3416 [35mhttp[39m: [35m[1760106856047-787725] GET /api/v1/docs/json - Request started[39m
+2025-10-10 15:34:16:3416 [35mhttp[39m: [35m[1760106856047-787725] GET /json - Response status: 200[39m
+2025-10-10 15:34:24:3424 [35mhttp[39m: [35m[1760106864374-860089] GET /api/v1/docs/ - Request started[39m
+2025-10-10 15:34:24:3424 [35mhttp[39m: [35m[1760106864374-860089] GET / - Response status: 200[39m
+2025-10-10 15:43:34:4334 [32minfo[39m: [32mServer is running on port 3000[39m
+2025-10-10 15:43:34:4334 [35mhttp[39m: [35m[1760107414959-252619] GET /api/v1/docs - Request started[39m
+2025-10-10 15:43:34:4334 [35mhttp[39m: [35m[1760107414959-252619] GET / - Response status: 301[39m
+2025-10-10 15:43:34:4334 [35mhttp[39m: [35m[1760107414974-381457] GET /api/v1/docs/ - Request started[39m
+2025-10-10 15:43:34:4334 [35mhttp[39m: [35m[1760107414974-381457] GET / - Response status: 200[39m
+2025-10-10 15:43:34:4334 [35mhttp[39m: [35m[1760107414989-768169] GET /api/v1/docs/swagger-ui.css - Request started[39m
+2025-10-10 15:43:34:4334 [35mhttp[39m: [35m[1760107414991-855537] GET /api/v1/docs/swagger-ui-bundle.js - Request started[39m
+2025-10-10 15:43:34:4334 [35mhttp[39m: [35m[1760107414989-768169] GET /swagger-ui.css - Response status: 200[39m
+2025-10-10 15:43:34:4334 [35mhttp[39m: [35m[1760107414999-43792] GET /api/v1/docs/swagger-ui-standalone-preset.js - Request started[39m
+2025-10-10 15:43:35:4335 [35mhttp[39m: [35m[1760107415002-629517] GET /api/v1/docs/swagger-ui-init.js - Request started[39m
+2025-10-10 15:43:35:4335 [35mhttp[39m: [35m[1760107415002-629517] GET /swagger-ui-init.js - Response status: 200[39m
+2025-10-10 15:43:35:4335 [35mhttp[39m: [35m[1760107414999-43792] GET /swagger-ui-standalone-preset.js - Response status: 200[39m
+2025-10-10 15:43:35:4335 [35mhttp[39m: [35m[1760107414991-855537] GET /swagger-ui-bundle.js - Response status: 200[39m
+2025-10-10 15:43:35:4335 [35mhttp[39m: [35m[1760107415845-836113] GET /api/v1/docs/favicon-32x32.png - Request started[39m
+2025-10-10 15:43:35:4335 [35mhttp[39m: [35m[1760107415845-836113] GET /favicon-32x32.png - Response status: 200[39m
+2025-10-10 16:12:04:124 [32minfo[39m: [32mServer is running on port 3000[39m
+2025-10-10 16:12:20:1220 [32minfo[39m: [32mServer is running on port 3000[39m
+2025-10-10 16:12:24:1224 [35mhttp[39m: [35m[1760109144643-626685] GET /api/v1/docs/ - Request started[39m
+2025-10-10 16:12:24:1224 [35mhttp[39m: [35m[1760109144643-626685] GET / - Response status: 304[39m
+2025-10-10 16:12:24:1224 [35mhttp[39m: [35m[1760109144658-760023] GET /api/v1/docs/swagger-ui.css - Request started[39m
+2025-10-10 16:12:24:1224 [35mhttp[39m: [35m[1760109144658-760023] GET /swagger-ui.css - Response status: 304[39m
+2025-10-10 16:12:24:1224 [35mhttp[39m: [35m[1760109144662-176513] GET /api/v1/docs/swagger-ui-bundle.js - Request started[39m
+2025-10-10 16:12:24:1224 [35mhttp[39m: [35m[1760109144662-410232] GET /api/v1/docs/swagger-ui-standalone-preset.js - Request started[39m
+2025-10-10 16:12:24:1224 [35mhttp[39m: [35m[1760109144663-630182] GET /api/v1/docs/swagger-ui-init.js - Request started[39m
+2025-10-10 16:12:24:1224 [35mhttp[39m: [35m[1760109144663-630182] GET /swagger-ui-init.js - Response status: 200[39m
+2025-10-10 16:12:24:1224 [35mhttp[39m: [35m[1760109144662-176513] GET /swagger-ui-bundle.js - Response status: 304[39m
+2025-10-10 16:12:24:1224 [35mhttp[39m: [35m[1760109144662-410232] GET /swagger-ui-standalone-preset.js - Response status: 304[39m
+2025-10-10 16:12:24:1224 [35mhttp[39m: [35m[1760109144861-188485] GET /api/v1/docs/favicon-32x32.png - Request started[39m
+2025-10-10 16:12:24:1224 [35mhttp[39m: [35m[1760109144861-188485] GET /favicon-32x32.png - Response status: 304[39m
+2025-10-10 19:57:53:5753 [35mhttp[39m: [35m[1760122673788-306249] GET /api/v1/events - Request started[39m
+2025-10-10 19:57:53:5753 [33mwarn[39m: [33mCustom error: VALIDATION_ERROR - Validation failed: Cannot set property query of #<IncomingMessage> which has only a getter[39m
+2025-10-10 19:57:53:5753 [35mhttp[39m: [35m[1760122673788-306249] GET /api/v1/events - Response status: 400[39m
+2025-10-10 19:57:53:5753 [35mhttp[39m: [35m[1760122673802-123089] GET /api/v1/events - Request started[39m
+2025-10-10 19:57:53:5753 [33mwarn[39m: [33mCustom error: VALIDATION_ERROR - Validation failed: Cannot set property query of #<IncomingMessage> which has only a getter[39m
+2025-10-10 19:57:53:5753 [35mhttp[39m: [35m[1760122673802-123089] GET /api/v1/events - Response status: 400[39m

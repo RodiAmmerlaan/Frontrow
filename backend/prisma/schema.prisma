@@ -1,0 +1,99 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model AuditLogs {
+  id         BigInt    @id @default(autoincrement())
+  user_id    String?   @db.Uuid
+  action     String    @db.VarChar(255)
+  entity     String?   @db.VarChar(255)
+  entity_id  String?   @db.Uuid
+  details    Json?
+  created_at DateTime? @default(now()) @db.Timestamp(6)
+  Users      Users?    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model Events {
+  id            String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title         String          @unique @db.VarChar(255)
+  description   String?
+  start_time    DateTime        @db.Timestamp(6)
+  end_time      DateTime        @db.Timestamp(6)
+  created_by    String?         @db.Uuid
+  created_at    DateTime?       @default(now()) @db.Timestamp(6)
+  Users         Users?          @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Orders        Orders[]
+  TicketBatches TicketBatches[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model Orders {
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id      String?   @db.Uuid
+  event_id     String?   @db.Uuid
+  total_amount Int
+  created_at   DateTime? @default(now()) @db.Timestamp(6)
+  Events       Events?   @relation(fields: [event_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Users        Users?    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Tickets      Tickets[]
+}
+
+model RefreshToken {
+  id          BigInt    @id @default(autoincrement())
+  user_id     String?   @db.Uuid
+  hashedtoken String    @db.VarChar(255)
+  createdat   DateTime? @default(now()) @db.Timestamp(6)
+  expiresat   DateTime? @db.Timestamp(6)
+  revokedat   DateTime? @db.Timestamp(6)
+  Users       Users?    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model TicketBatches {
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  event_id      String?   @db.Uuid
+  total_tickets Int
+  price         Int
+  created_at    DateTime? @default(now()) @db.Timestamp(6)
+  Events        Events?   @relation(fields: [event_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model Tickets {
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  order_id      String?   @db.Uuid
+  ticket_number String    @unique @db.VarChar(50)
+  assigned_to   String?   @db.Uuid
+  created_at    DateTime? @default(now()) @db.Timestamp(6)
+  Users         Users?    @relation(fields: [assigned_to], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Orders        Orders?   @relation(fields: [order_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model Users {
+  id           String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email        String         @unique @db.VarChar(255)
+  password     String         @db.VarChar(255)
+  first_name   String?        @db.VarChar(100)
+  last_name    String?        @db.VarChar(100)
+  street       String?        @db.VarChar(255)
+  house_number String?        @db.VarChar(50)
+  postal_code  String?        @db.VarChar(20)
+  city         String?        @db.VarChar(100)
+  created_at   DateTime?      @default(now()) @db.Timestamp(6)
+  updated_at   DateTime?      @default(now()) @db.Timestamp(6)
+  role         String         @db.VarChar(10)
+  AuditLogs    AuditLogs[]
+  Events       Events[]
+  Orders       Orders[]
+  RefreshToken RefreshToken[]
+  Tickets      Tickets[]
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  CANCELLED
+}

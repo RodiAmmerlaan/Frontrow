@@ -1,0 +1,22 @@
+2025-10-02 22:38:42:3842 [31merror[39m: [31mError in getAllEventsController: [39m
+[31mInvalid `this.prisma.events.findMany()` invocation in[39m
+[31mC:\Users\ammer\Documents\OELAN\FrontRow\backend\src\repositories\EventRepositoryImpl.ts:106:37[39m
+
+[31m  103  * @returns A promise that resolves to an array of events[39m
+[31m  104  */[39m
+[31m  105 async findAllByDate(): Promise<Events[]> {[39m
+[31m→ 106   return await this.prisma.events.findMany([39m
+[31mCan't reach database server at `localhost:54321`[39m
+
+[31mPlease make sure your database server is running at `localhost:54321`.[39m
+2025-10-02 22:38:46:3846 [31merror[39m: [31mError in getAllEventsController: [39m
+[31mInvalid `this.prisma.events.findMany()` invocation in[39m
+[31mC:\Users\ammer\Documents\OELAN\FrontRow\backend\src\repositories\EventRepositoryImpl.ts:106:37[39m
+
+[31m  103  * @returns A promise that resolves to an array of events[39m
+[31m  104  */[39m
+[31m  105 async findAllByDate(): Promise<Events[]> {[39m
+[31m→ 106   return await this.prisma.events.findMany([39m
+[31mCan't reach database server at `localhost:54321`[39m
+
+[31mPlease make sure your database server is running at `localhost:54321`.[39m
