@@ -1,0 +1,106 @@
+/* Enhanced Navigation */
+.app-navigation {
+  background: var(--glass-background);
+  backdrop-filter: var(--glass-backdrop);
+  padding: var(--spacing-lg) var(--spacing-lg);
+  border-bottom: none;
+  margin-bottom: 0;
+  box-shadow: var(--shadow-sm);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 3px solid transparent;
+  border-image: var(--primary-gradient) 1;
+}
+
+.app-nav-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-lg);
+}
+
+/* Navigation Layout */
+.app-nav-links {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+.app-nav-search {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  max-width: 400px;
+  margin: 0 var(--spacing-lg);
+}
+
+.app-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  white-space: nowrap;
+}
+
+/* FrontRow Brand Styling */
+.app-brand {
+  margin-right: var(--spacing-lg);
+}
+
+.app-brand-link {
+  font-family: var(--font-family-heading);
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-extrabold);
+  color: var(--primary-color);
+  text-decoration: none;
+  text-transform: uppercase;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: var(--line-height-tight);
+  display: inline-block;
+}
+
+.app-nav-link {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-lg);
+  transition: all var(--transition-normal);
+  position: relative;
+  padding: 8px 12px;
+  border-radius: var(--border-radius-sm);
+}
+
+.app-nav-link:hover {
+  color: var(--primary-hover);
+  background: var(--primary-light);
+  transform: translateY(-1px);
+}
+
+.app-nav-separator {
+  color: #f8c2d4;
+}
+
+.app-welcome-message {
+  color: var(--primary-color);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  background-color: var(--primary-light);
+  padding: 6px var(--spacing-md);
+  border-radius: var(--spacing-md);
+  border: 1px solid rgba(233, 30, 99, 0.2);
+}
+
+.app-auth-link {
+  color: #ad7a90;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.app-auth-link:hover {
+  color: var(--primary-color);
+}
