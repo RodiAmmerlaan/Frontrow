@@ -7,7 +7,7 @@
     "moduleResolution": "Node",                 
 
     /* Paths and Output */
-    "rootDir": "src",                           
+    "rootDir": ".",                           
     "outDir": "dist",                           
     "baseUrl": "./",                            
 
@@ -23,8 +23,11 @@
 
     /* Source Maps (for debugging) */
     "sourceMap": true,                          
-    "inlineSources": true                       
+    "inlineSources": true,
+    
+    /* Types */
+    "types": ["node", "jest"]
   },
-  "include": ["src"],                           
+  "include": ["src", "tests"],                           
   "exclude": ["node_modules", "dist"]           
 }
