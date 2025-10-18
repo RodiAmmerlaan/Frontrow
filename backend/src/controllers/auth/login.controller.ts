@@ -90,7 +90,7 @@ export class LoginController extends BaseController {
         response: Response,
     ) {
         const correlationId = (request as any).correlationId || 'N/A';
-        const { email, password } = request.body;
+        const { email, password } = request.validated?.body || request.body;
         Logger.debug(`[${correlationId}] Login controller called`, { email });
         
         try {

@@ -128,7 +128,7 @@ export class BuyTicketsController extends BaseController {
         response: Response
     ) {
         const correlationId = (request as any).correlationId || 'N/A';
-        const { event_id, user_id, total_amount } = request.body;
+        const { event_id, user_id, total_amount } = request.validated?.body || request.body;
         Logger.debug(`[${correlationId}] Buy tickets controller called`, { event_id, user_id, total_amount });
         
         try {

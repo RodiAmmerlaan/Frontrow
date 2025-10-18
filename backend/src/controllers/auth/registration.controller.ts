@@ -107,13 +107,13 @@ export async function registrationController(
     response: Response
 ) {
     const correlationId = (request as any).correlationId || 'N/A';
+    const { email, password, first_name, last_name, street, house_number, postal_code, city } = request.validated?.body || request.body;
+    
     Logger.debug(`[${correlationId}] Registration controller called`, { 
-        email: request.body.email 
+        email 
     });
     
     try {
-        const { email, password, first_name, last_name, street, house_number, postal_code, city } = request.body;
-        
         const authResult = await AuthService.registerUser({
             email,
             password,

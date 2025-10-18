@@ -76,7 +76,7 @@ export class GetEventByIdController extends BaseController {
         response: Response
     ) {
         const correlationId = (request as any).correlationId || 'N/A';
-        const { eventId } = request.params;
+        const { eventId } = request.validated?.params || request.params;
         Logger.debug(`[${correlationId}] Get event by ID controller called`, { eventId });
         
         try {

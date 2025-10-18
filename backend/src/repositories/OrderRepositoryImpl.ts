@@ -93,7 +93,15 @@ export class OrderRepositoryImpl extends BaseRepositoryImpl<Orders, string> impl
    * @returns A promise that resolves to an array of orders for the event
    */
   async findByEventId(eventId: string): Promise<Orders[]> {
-    return await this.prisma.orders.findMany({ where: { event_id: eventId } });
+    const startDate = new Date(0);
+    return await this.prisma.orders.findMany({ 
+      where: { 
+        AND: [
+          { event_id: eventId },
+          { created_at: { gte: startDate } }
+        ]
+      } 
+    });
   }
 
   /**

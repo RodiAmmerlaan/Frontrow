@@ -84,7 +84,10 @@ export class RefreshTokenRepositoryImpl extends BaseRepositoryImpl<RefreshToken,
    * @returns A promise that resolves to an array of refresh tokens for the user
    */
   async findByUserId(userId: string): Promise<RefreshToken[]> {
-    return await this.prisma.refreshToken.findMany({ where: { user_id: userId } });
+    return await this.prisma.refreshToken.findMany({ 
+      where: { user_id: userId },
+      orderBy: { createdat: 'asc' }
+    });
   }
 
   /**

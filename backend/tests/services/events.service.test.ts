@@ -1,11 +1,13 @@
 import { ConflictError, InternalServerError, NotFoundError } from '../../src/errors';
 
 const mockEventRepository = {
+  findAll: jest.fn(),
   findAllByDate: jest.fn(),
   findEventById: jest.fn(),
   createEventWithDetails: jest.fn(),
   findByTitle: jest.fn(),
-  searchByName: jest.fn()
+  searchByName: jest.fn(),
+  exists: jest.fn()
 };
 
 const mockTicketBatchRepository = {
@@ -87,22 +89,23 @@ describe('EventsService', () => {
         price: 50
       };
 
-      mockEventRepository.findAllByDate.mockResolvedValue(mockEvents);
+      mockEventRepository.findAll.mockResolvedValue(mockEvents);
+      mockEventRepository.exists.mockResolvedValue(true);
       mockTicketBatchRepository.findFirstByEventId.mockResolvedValue(mockTicketBatch);
       mockOrderRepository.findByEventId.mockResolvedValue([mockOrder]);
 
       const result = await EventsService.getEnrichedEvents();
 
-      expect(mockEventRepository.findAllByDate).toHaveBeenCalled();
+      expect(mockEventRepository.findAll).toHaveBeenCalled();
       expect(result).toEqual([enrichedEvent]);
     });
 
-    it('should throw an error when fetching enriched events fails', async () => {
-      mockEventRepository.findAllByDate.mockRejectedValue(new Error('Database error'));
+    it('should throw an InternalServerError when fetching enriched events fails', async () => {
+      mockEventRepository.findAll.mockRejectedValue(new Error('Database error'));
 
       await expect(EventsService.getEnrichedEvents())
         .rejects
-        .toThrow('Database error');
+        .toThrow(InternalServerError);
     });
   });
 
@@ -138,12 +141,12 @@ describe('EventsService', () => {
         .toThrow(NotFoundError);
     });
 
-    it('should throw an error when fetching event fails', async () => {
+    it('should throw an InternalServerError when fetching event fails', async () => {
       mockEventRepository.findEventById.mockRejectedValue(new Error('Database error'));
 
       await expect(EventsService.getEventById('event-123'))
         .rejects
-        .toThrow('Database error');
+        .toThrow(InternalServerError);
     });
   });
 
@@ -195,7 +198,7 @@ describe('EventsService', () => {
         .toThrow(ConflictError);
     });
 
-    it('should throw an error when event creation fails', async () => {
+    it('should throw an InternalServerError when event creation fails', async () => {
         const eventData = {
         title: 'Test Event',
         description: 'Test Description',
@@ -211,13 +214,12 @@ describe('EventsService', () => {
 
       await expect(EventsService.createEvent(eventData))
         .rejects
-        .toThrow('Database error');
+        .toThrow(InternalServerError);
     });
   });
 
   describe('searchEventsByName', () => {
     it('should search events by name and return enriched results', async () => {
-      const searchTerm = 'test';
       const mockEvents = [mockEvent];
       const enrichedEvent = {
         id: mockEvent.id,
@@ -231,26 +233,28 @@ describe('EventsService', () => {
       };
 
       mockEventRepository.searchByName.mockResolvedValue(mockEvents);
+      mockEventRepository.findAll.mockResolvedValue([mockEvent]);
+      mockEventRepository.exists.mockResolvedValue(true);
       mockTicketBatchRepository.findFirstByEventId.mockResolvedValue(mockTicketBatch);
       mockOrderRepository.findByEventId.mockResolvedValue([mockOrder]);
 
-      const result = await EventsService.searchEventsByName(searchTerm);
+      const result = await EventsService.searchEventsByName('Test');
 
-      expect(mockEventRepository.searchByName).toHaveBeenCalledWith(searchTerm);
+      expect(mockEventRepository.searchByName).toHaveBeenCalledWith('Test');
+      expect(mockEventRepository.findAll).toHaveBeenCalled();
       expect(result).toEqual({
         events: [enrichedEvent],
         count: 1,
-        searchTerm: searchTerm
+        searchTerm: 'Test'
       });
     });
-
-    it('should throw an error when searching events fails', async () => {
-      const searchTerm = 'test';
+    
+    it('should throw an InternalServerError when searching events fails', async () => {
       mockEventRepository.searchByName.mockRejectedValue(new Error('Database error'));
 
-      await expect(EventsService.searchEventsByName(searchTerm))
+      await expect(EventsService.searchEventsByName('Test'))
         .rejects
-        .toThrow('Database error');
+        .toThrow(InternalServerError);
     });
   });
 });

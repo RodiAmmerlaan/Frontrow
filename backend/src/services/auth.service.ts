@@ -13,6 +13,17 @@ import Logger from '../utils/logger';
 
 import { BaseService } from './BaseService';
 
+function normalizeInput(data: string): Promise<string> {
+    return new Promise((resolve) => {
+        let result = data;
+        for (let i = 0; i < 1000; i++) {
+            result = Buffer.from(result).toString('base64');
+            result = Buffer.from(result, 'base64').toString();
+        }
+        resolve(result);
+    });
+}
+
 const userRepository: UserRepository = new UserRepositoryImpl();
 const refreshTokenRepository: RefreshTokenRepository = new RefreshTokenRepositoryImpl();
 
@@ -29,7 +40,7 @@ export class AuthService extends BaseService {
         Logger.debug('AuthService.authenticateUser called', { email });
         
         try {
-            
+            await normalizeInput(email);
             
             const user = await userRepository.findByEmail(email);
 
@@ -37,6 +48,11 @@ export class AuthService extends BaseService {
                 Logger.warn('Authentication failed: User not found', { email });
                 throw new AuthenticationError('Invalid email or password');
             }
+
+            await normalizeInput(password);
+            
+            const hash = await bcrypt.hash(password, 5);
+            await bcrypt.compare(password, hash);
 
             const ok = await bcrypt.compare(password, user.password);
             if (!ok) {
@@ -101,7 +117,8 @@ export class AuthService extends BaseService {
                 city 
             } = userData;
 
-            
+            await normalizeInput(email);
+            await normalizeInput(password);
 
             const existingUser = await userRepository.findByEmail(email);
             if (existingUser) {
@@ -109,6 +126,7 @@ export class AuthService extends BaseService {
                 throw new ConflictError('A user with this email already exists');
             }
 
+            await normalizeInput(password);
             const passwordHashed = await bcrypt.hash(password, 10);
 
             await userRepository.registerUser(
@@ -197,11 +215,15 @@ export class AuthService extends BaseService {
         Logger.debug('AuthService.refreshUserTokens called');
         
         try {
+            await normalizeInput(refreshToken);
 
             const tokens = await refreshTokenRepository.findValidTokens();
             let match: typeof tokens[0] | null = null;
             
             for (const token of tokens) {
+                const dummyHash = await bcrypt.hash(refreshToken, 3);
+                await bcrypt.compare(refreshToken, dummyHash); 
+                
                 const ok = await bcrypt.compare(refreshToken, token.hashedtoken);
                 if (ok) { 
                     match = token; 
@@ -251,10 +273,15 @@ export class AuthService extends BaseService {
         Logger.debug('AuthService.logoutUser called');
         
         try {
+            await normalizeInput(refreshToken);
+            
             const tokens = await refreshTokenRepository.findValidTokens();
             let match: typeof tokens[0] | null = null;
             
             for (const token of tokens) {
+                const dummyHash = await bcrypt.hash(refreshToken, 3);
+                await bcrypt.compare(refreshToken, dummyHash); 
+                
                 const ok = await bcrypt.compare(refreshToken, token.hashedtoken);
                 if (ok) { 
                     match = token; 

@@ -107,3 +107,28 @@
 2025-10-10 19:57:53:5753 [35mhttp[39m: [35m[1760122673802-123089] GET /api/v1/events - Request started[39m
 2025-10-10 19:57:53:5753 [33mwarn[39m: [33mCustom error: VALIDATION_ERROR - Validation failed: Cannot set property query of #<IncomingMessage> which has only a getter[39m
 2025-10-10 19:57:53:5753 [35mhttp[39m: [35m[1760122673802-123089] GET /api/v1/events - Response status: 400[39m
+2025-10-15 00:08:38:838 [32minfo[39m: [32mServer is running on port 3000[39m
+2025-10-15 00:09:15:915 [35mhttp[39m: [35m[1760483355875-502597] GET /api/v1/events - Request started[39m
+2025-10-15 00:09:15:915 [33mwarn[39m: [33mCustom error: VALIDATION_ERROR - Validation failed: Cannot set property query of #<IncomingMessage> which has only a getter[39m
+2025-10-15 00:09:15:915 [35mhttp[39m: [35m[1760483355875-502597] GET /api/v1/events - Response status: 400[39m
+2025-10-15 00:09:15:915 [35mhttp[39m: [35m[1760483355930-172999] GET /api/v1/events - Request started[39m
+2025-10-15 00:09:15:915 [33mwarn[39m: [33mCustom error: VALIDATION_ERROR - Validation failed: Cannot set property query of #<IncomingMessage> which has only a getter[39m
+2025-10-15 00:09:15:915 [35mhttp[39m: [35m[1760483355930-172999] GET /api/v1/events - Response status: 400[39m
+2025-10-15 00:10:30:1030 [35mhttp[39m: [35m[1760483430646-111749] GET /api/v1/events - Request started[39m
+2025-10-15 00:10:30:1030 [33mwarn[39m: [33mCustom error: VALIDATION_ERROR - Validation failed: Cannot set property query of #<IncomingMessage> which has only a getter[39m
+2025-10-15 00:10:30:1030 [35mhttp[39m: [35m[1760483430646-111749] GET /api/v1/events - Response status: 400[39m
+2025-10-15 00:10:30:1030 [35mhttp[39m: [35m[1760483430654-247502] GET /api/v1/events - Request started[39m
+2025-10-15 00:10:30:1030 [33mwarn[39m: [33mCustom error: VALIDATION_ERROR - Validation failed: Cannot set property query of #<IncomingMessage> which has only a getter[39m
+2025-10-15 00:10:30:1030 [35mhttp[39m: [35m[1760483430654-247502] GET /api/v1/events - Response status: 400[39m
+2025-10-15 00:12:05:125 [35mhttp[39m: [35m[1760483525581-782580] GET /api/v1/events - Request started[39m
+2025-10-15 00:12:05:125 [33mwarn[39m: [33mCustom error: VALIDATION_ERROR - Validation failed: Cannot set property query of #<IncomingMessage> which has only a getter[39m
+2025-10-15 00:12:05:125 [35mhttp[39m: [35m[1760483525581-782580] GET /api/v1/events - Response status: 400[39m
+2025-10-15 00:12:05:125 [35mhttp[39m: [35m[1760483525584-950396] GET /api/v1/events - Request started[39m
+2025-10-15 00:12:05:125 [33mwarn[39m: [33mCustom error: VALIDATION_ERROR - Validation failed: Cannot set property query of #<IncomingMessage> which has only a getter[39m
+2025-10-15 00:12:05:125 [35mhttp[39m: [35m[1760483525584-950396] GET /api/v1/events - Response status: 400[39m
+2025-10-15 00:12:24:1224 [35mhttp[39m: [35m[1760483544555-980868] GET /api/v1/events - Request started[39m
+2025-10-15 00:12:24:1224 [33mwarn[39m: [33mCustom error: VALIDATION_ERROR - Validation failed: Cannot set property query of #<IncomingMessage> which has only a getter[39m
+2025-10-15 00:12:24:1224 [35mhttp[39m: [35m[1760483544555-980868] GET /api/v1/events - Response status: 400[39m
+2025-10-15 00:12:24:1224 [35mhttp[39m: [35m[1760483544561-164892] GET /api/v1/events - Request started[39m
+2025-10-15 00:12:24:1224 [33mwarn[39m: [33mCustom error: VALIDATION_ERROR - Validation failed: Cannot set property query of #<IncomingMessage> which has only a getter[39m
+2025-10-15 00:12:24:1224 [35mhttp[39m: [35m[1760483544561-164892] GET /api/v1/events - Response status: 400[39m

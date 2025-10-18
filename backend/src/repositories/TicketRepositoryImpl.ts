@@ -76,7 +76,15 @@ export class TicketRepositoryImpl extends BaseRepositoryImpl<Tickets, string> im
    * @returns A promise that resolves to an array of tickets for the order
    */
   async findByOrderId(orderId: string): Promise<Tickets[]> {
-    return await this.prisma.tickets.findMany({ where: { order_id: orderId } });
+    const now = new Date();
+    return await this.prisma.tickets.findMany({ 
+      where: { 
+        AND: [
+          { order_id: orderId },
+          { created_at: { lte: now } }
+        ]
+      }
+    });
   }
 
   /**

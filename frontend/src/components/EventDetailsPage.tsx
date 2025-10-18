@@ -6,7 +6,7 @@ import api from '../utils/api';
 import '../styles/EventDetailsPage.css';
 import { selectImageForEvent, getEventImages } from '../utils/imageUtils';
 import { formatDate, formatTime } from '../utils/dateUtils';
-import { EventDetails } from '../interfaces/event.interface';
+import { EventOverview } from '../interfaces/event.interface';
 
 interface Props {
     accessToken: string | null;
@@ -15,7 +15,7 @@ interface Props {
 export default function EventDetailsPage({ accessToken }: Props) {
     const { eventId } = useParams<{ eventId: string }>();
     const navigate = useNavigate();
-    const [event, setEvent] = useState<EventDetails | null>(null);
+    const [event, setEvent] = useState<EventOverview | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [modalIsOpen, setIsOpen] = useState(false);

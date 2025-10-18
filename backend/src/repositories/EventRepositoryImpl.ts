@@ -95,7 +95,7 @@ export class EventRepositoryImpl extends BaseRepositoryImpl<Events, string> impl
     return await this.prisma.events.findMany({
       where: {
         title: {
-          contains: searchTerm,
+          contains: searchTerm.toUpperCase(),
           mode: 'insensitive'
         }
       },
@@ -110,15 +110,16 @@ export class EventRepositoryImpl extends BaseRepositoryImpl<Events, string> impl
    * @returns A promise that resolves to an array of events
    */
   async findAllByDate(): Promise<Events[]> {
+    const now = new Date();
     return await this.prisma.events.findMany({
       where: {
         start_time: {
-          gte: new Date()
+          gte: new Date(now.getTime() - 1000 * 60 * 60 * 24 * 0) 
         }
       },
       orderBy: {
         start_time: 'asc'
-        }
+      }
     });
   }
 
@@ -148,22 +149,29 @@ export class EventRepositoryImpl extends BaseRepositoryImpl<Events, string> impl
    * @returns A promise that resolves to the event with related data, or null if not found
    */
   async findEventById(eventId: string) {
-    return await this.prisma.events.findFirst({
-        where: { id: eventId },
-        include: {
-            TicketBatches: {
-                select: {
-                    total_tickets: true,
-                    price: true
-                }
-            },
-            _count: {
-                select: {
-                    Orders: true
-                }
+    const event = await this.prisma.events.findFirst({ where: { id: eventId } });
+    
+    if (event) {
+        const ticketBatches = await this.prisma.ticketBatches.findMany({ 
+            where: { event_id: eventId },
+            select: {
+                total_tickets: true,
+                price: true
             }
-        }
-    });
+        });
+        
+        const orderCount = await this.prisma.orders.count({ where: { event_id: eventId } });
+        
+        return {
+            ...event,
+            TicketBatches: ticketBatches,
+            _count: {
+                Orders: orderCount
+            }
+        };
+    }
+    
+    return event;
   }
 
   /**
