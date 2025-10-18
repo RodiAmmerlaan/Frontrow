@@ -9,7 +9,6 @@ export async function validateOpenApiSpec(): Promise<boolean> {
   try {
     const specs: any = swaggerJsdoc(openApiConfig);
     
-    // Basic validation - check if required fields exist
     if (!specs.openapi) {
       console.error('OpenAPI version missing');
       return false;
@@ -38,7 +37,6 @@ export async function validateOpenApiSpec(): Promise<boolean> {
   }
 }
 
-// Run validation if this file is executed directly
 if (require.main === module) {
   validateOpenApiSpec().then(isValid => {
     if (isValid) {

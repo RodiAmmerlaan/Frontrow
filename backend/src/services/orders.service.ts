@@ -33,13 +33,22 @@ export class OrdersService extends BaseService {
         
         try {
             const event = await this.verifyEventExists(event_id);
+            const eventDetails = await eventRepository.findById(event_id);
             
             const user = await this.verifyUserExists(user_id);
+            const userDetails = await userRepository.findById(user_id);
             
             const { ticketBatch, ticketsLeft } = await this.checkTicketAvailability(event_id, total_amount);
+            const ticketBatchDetails = await ticketBatchRepository.findFirstByEventId(event_id);
+            
+            await this.checkTicketAvailability(event_id, total_amount);
             
             const order = await orderRepository.buyTickets(event_id, user_id, total_amount);
+            const createdOrder = await orderRepository.findById(order.id);
+            
             const tickets = await ticketRepository.createTickets(order.id, user_id, total_amount);
+            
+            const createdTickets = await ticketRepository.findByOrderId(order.id);
 
             Logger.info('Ticket purchase processed successfully', { 
                 order_id: order.id, 
