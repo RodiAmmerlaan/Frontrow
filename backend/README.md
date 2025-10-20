@@ -16,6 +16,14 @@ This is the backend for the FrontRow application.
    npm run dev
    ```
 
+## Testdata
+
+To generate testdata, run the following command:
+
+```bash
+npx prisma db seed
+```
+
 ## Testing
 
 This project includes comprehensive unit tests for all services.
@@ -34,8 +42,6 @@ To generate a coverage report:
 ```bash
 npm run test:coverage
 ```
-
-See [tests/README.md](tests/README.md) for more details about the testing setup.
 
 ## API Documentation
 
