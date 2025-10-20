@@ -85,7 +85,11 @@ export class TicketBatchRepositoryImpl extends BaseRepositoryImpl<TicketBatches,
    * @returns A promise that resolves to the first ticket batch or null if not found
    */
   async findFirstByEventId(eventId: string): Promise<TicketBatches | null> {
-    return await this.prisma.ticketBatches.findFirst({ where: { event_id: eventId } });
+    const batches = await this.prisma.ticketBatches.findMany({ 
+      where: { event_id: eventId },
+      take: 1
+    });
+    return batches.length > 0 ? batches[0] : null;
   }
 
   /**

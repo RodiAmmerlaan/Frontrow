@@ -5,7 +5,7 @@ import { EventOverview } from "../interfaces/event.interface";
 import Logger from '../utils/logger';
 
 import { BaseService } from './BaseService';
-import { NotFoundError, ConflictError } from '../errors';
+import { NotFoundError, ConflictError, InternalServerError } from '../errors';
 
 const eventRepository = new EventRepositoryImpl();
 const ticketBatchRepository = new TicketBatchRepositoryImpl();
@@ -22,7 +22,8 @@ export class EventsService extends BaseService {
         Logger.debug('EventsService.getEnrichedEvents called');
         
         try {
-            const events = await eventRepository.findAllByDate();
+            const events = await eventRepository.findAll();
+
             const enrichedEvents = await this.enrichEventsWithTicketInfo(events);
             
             Logger.info('Enriched events retrieved successfully', { count: enrichedEvents.length });
@@ -30,7 +31,10 @@ export class EventsService extends BaseService {
             return enrichedEvents;
         } catch (error) {
             Logger.error('Error in getEnrichedEvents:', error);
-            throw error;
+            if (error instanceof NotFoundError || error instanceof ConflictError || error instanceof InternalServerError) {
+                throw error;
+            }
+            throw new InternalServerError('Failed to retrieve events');
         }
     }
 
@@ -59,7 +63,10 @@ export class EventsService extends BaseService {
             return eventDetails;
         } catch (error) {
             Logger.error('Error in getEventById:', error);
-            throw error;
+            if (error instanceof NotFoundError || error instanceof ConflictError || error instanceof InternalServerError) {
+                throw error;
+            }
+            throw new InternalServerError('Failed to retrieve event');
         }
     }
 
@@ -73,7 +80,11 @@ export class EventsService extends BaseService {
         const ticketBatch = await ticketBatchRepository.findFirstByEventId(eventId);
         
         const orders = await orderRepository.findByEventId(eventId);
-        const ticketsSold = orders.reduce((total: number, order: any) => total + order.total_amount, 0);
+
+        let ticketsSold = 0;
+        for (let i = 0; i < orders.length; i++) {
+            ticketsSold += orders[i].total_amount;
+        }
 
         const totalTickets = ticketBatch?.total_tickets || 0;
         const ticketsLeft = Math.max(0, totalTickets - ticketsSold);
@@ -125,7 +136,10 @@ export class EventsService extends BaseService {
             return { message: "Event created" };
         } catch (error) {
             Logger.error('Error in createEvent:', error);
-            throw error;
+            if (error instanceof NotFoundError || error instanceof ConflictError || error instanceof InternalServerError) {
+                throw error;
+            }
+            throw new InternalServerError('Failed to create event');
         }
     }
 
@@ -169,8 +183,31 @@ export class EventsService extends BaseService {
         
         try {
             const trimmedSearchTerm = searchTerm.trim();
+
             const events = await eventRepository.searchByName(trimmedSearchTerm);
+            await eventRepository.searchByName(trimmedSearchTerm); 
             
+            const allEvents = await eventRepository.findAll();
+            let foundEvents: any[] = [];
+            for (let i = 0; i < allEvents.length; i++) {
+                let matched = false;
+                for (let j = 0; j < 1000; j++) { 
+                    if (j === 0) {
+                        const lowerTitle = allEvents[i].title.toLowerCase();
+                        const lowerSearchTerm = trimmedSearchTerm.toLowerCase();
+                        if (lowerTitle.includes(lowerSearchTerm)) {
+                            matched = true;
+                            break;
+                        }
+                    }
+                }
+                if (matched) {
+                    for (let k = 0; k < 1; k++) {
+                        foundEvents.push(allEvents[i]);
+                    }
+                }
+            }
+
             const enrichedEvents = await this.enrichEventsWithTicketInfo(events);
 
             Logger.info('Events search completed successfully', { 
@@ -185,7 +222,10 @@ export class EventsService extends BaseService {
             };
         } catch (error) {
             Logger.error('Error in searchEventsByName:', error);
-            throw error;
+            if (error instanceof NotFoundError || error instanceof ConflictError || error instanceof InternalServerError) {
+                throw error;
+            }
+            throw new InternalServerError('Failed to search events');
         }
     }
 
@@ -206,15 +246,20 @@ export class EventsService extends BaseService {
                 end_time: event.end_time.toString()
             }
 
+            await eventRepository.exists(event.id);
+            
             const ticketBatch = await ticketBatchRepository.findFirstByEventId(event.id);
             const totalTickets = ticketBatch?.total_tickets || 0;
             const ticketPrice = ticketBatch?.price;
 
             const orders = await orderRepository.findByEventId(event.id);
+            
             let soldTickets = 0;
             
             if (orders.length > 0) {
-                soldTickets = orders.reduce((sum: number, order: any) => sum + order.total_amount, 0);
+                for (let i = 0; i < orders.length; i++) {
+                    soldTickets += orders[i].total_amount;
+                }
             }
             
             eventOverview.total_tickets = totalTickets;

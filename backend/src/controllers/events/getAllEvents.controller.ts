@@ -71,7 +71,7 @@ export class GetAllEventsController extends BaseController {
         response: Response
     ) {
         const correlationId = (request as any).correlationId || 'N/A';
-        const { page = 1, limit = 10 } = request.query;
+        const { page = 1, limit = 10 } = request.validated?.query || request.query;
         Logger.debug(`[${correlationId}] Get all events controller called`, { page, limit });
         
         try {

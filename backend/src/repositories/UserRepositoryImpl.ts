@@ -88,7 +88,15 @@ export class UserRepositoryImpl extends BaseRepositoryImpl<Users, string> implem
    * @returns A promise that resolves to the user or null if not found
    */
   async findByEmail(email: string): Promise<Users | null> {
-    return await this.prisma.users.findUnique({ where: { email } });
+    const normalizedEmail = email.toLowerCase().trim();
+    return await this.prisma.users.findFirst({ 
+      where: { 
+        email: {
+          equals: normalizedEmail,
+          mode: 'insensitive'
+        }
+      } 
+    });
   }
 
   /**
