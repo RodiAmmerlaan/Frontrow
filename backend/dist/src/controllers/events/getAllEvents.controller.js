@@ -71,7 +71,7 @@ class GetAllEventsController extends BaseController_1.BaseController {
      */
     async getAllEvents(request, response) {
         const correlationId = request.correlationId || 'N/A';
-        const { page = 1, limit = 10 } = request.query;
+        const { page = 1, limit = 10 } = request.validated?.query || request.query;
         logger_1.default.debug(`[${correlationId}] Get all events controller called`, { page, limit });
         try {
             const enrichedEvents = await events_service_1.EventsService.getEnrichedEvents();

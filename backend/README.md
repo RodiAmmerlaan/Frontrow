@@ -1,48 +1,61 @@
-# Backend
+# FrontRow Backend
 
-This is the backend for the FrontRow application.
+## Setup Instructions
 
-## Setup
+### Docker Setup
 
-1. Install dependencies:
+1. Build the Docker images:
    ```bash
-   npm install
+   docker-compose build
    ```
 
-2. Set up environment variables (copy .env.example to .env and fill in values)
-
-3. Run the development server:
+2. Start the services:
    ```bash
-   npm run dev
+   docker-compose up
    ```
 
-## Testdata
+The database seeding is handled automatically by the `seed` service in docker-compose.yml.
 
-To generate testdata, run the following command:
+### Manual Database Seeding
+
+If you need to seed the database manually, you can run:
 
 ```bash
-npx prisma db seed
+npm run seed
 ```
 
-## Testing
+Or using Docker:
 
-This project includes comprehensive unit tests for all services.
+```bash
+docker-compose run --rm backend npm run seed
+```
+
+### Development
+
+To run the backend in development mode:
+
+```bash
+npm run dev
+```
+
+### Building
+
+To build the TypeScript code:
+
+```bash
+npm run build
+```
+
+### Testing
 
 To run tests:
+
 ```bash
 npm test
 ```
 
-To run tests in watch mode:
-```bash
-npm run test:watch
-```
+To run tests with coverage:
 
-To generate a coverage report:
 ```bash
 npm run test:coverage
 ```
-
-## API Documentation
-
-API documentation is available at `/api/v1/docs` when the server is running.

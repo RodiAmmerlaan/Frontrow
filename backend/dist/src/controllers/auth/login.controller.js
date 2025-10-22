@@ -90,7 +90,7 @@ class LoginController extends BaseController_1.BaseController {
      */
     async login(request, response) {
         const correlationId = request.correlationId || 'N/A';
-        const { email, password } = request.body;
+        const { email, password } = request.validated?.body || request.body;
         logger_1.default.debug(`[${correlationId}] Login controller called`, { email });
         try {
             const authResult = await auth_service_1.AuthService.authenticateUser(email, password);

@@ -1,0 +1,81 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:13
+    container_name: frontrow-db
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: database
+    ports:
+      - "54321:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend Service
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: frontrow-backend
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - NODE_ENV=production
+      - CORS_ORIGIN=http://localhost:3001
+      - DATABASE_URL=postgresql://user:password@db:5432/database
+      - JWT_ACCESS_SECRET=default_access_secret
+      - REFRESH_TTL_DAYS=30
+    depends_on:
+      db:
+        condition: service_healthy
+    links:
+      - db
+
+  # Database Setup and Seeding Service (runs once after db is ready)
+  setup-db:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: frontrow-setup-db
+    environment:
+      - DATABASE_URL=postgresql://user:password@db:5432/database
+    depends_on:
+      db:
+        condition: service_healthy
+    command: >
+      sh -c "
+        echo 'Waiting for DB to be ready...' &&
+        sleep 10 &&
+        echo 'Setting up database schema...' &&
+        npx prisma db push &&
+        echo 'Running database seed...' &&
+        npx prisma db seed &&
+        echo 'Database setup and seeding completed'"
+
+  # Frontend Service
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontrow-frontend
+    restart: always
+    ports:
+      - "3001:3001"
+    environment:
+      - REACT_APP_BACKEND_URL=http://localhost:3000
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:

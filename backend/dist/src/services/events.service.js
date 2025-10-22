@@ -30,7 +30,10 @@ class EventsService extends BaseService_1.BaseService {
         }
         catch (error) {
             logger_1.default.error('Error in getEnrichedEvents:', error);
-            throw error;
+            if (error instanceof errors_1.NotFoundError || error instanceof errors_1.ConflictError || error instanceof errors_1.InternalServerError) {
+                throw error;
+            }
+            throw new errors_1.InternalServerError('Failed to retrieve events');
         }
     }
     /**
@@ -54,7 +57,10 @@ class EventsService extends BaseService_1.BaseService {
         }
         catch (error) {
             logger_1.default.error('Error in getEventById:', error);
-            throw error;
+            if (error instanceof errors_1.NotFoundError || error instanceof errors_1.ConflictError || error instanceof errors_1.InternalServerError) {
+                throw error;
+            }
+            throw new errors_1.InternalServerError('Failed to retrieve event');
         }
     }
     /**
@@ -104,7 +110,10 @@ class EventsService extends BaseService_1.BaseService {
         }
         catch (error) {
             logger_1.default.error('Error in createEvent:', error);
-            throw error;
+            if (error instanceof errors_1.NotFoundError || error instanceof errors_1.ConflictError || error instanceof errors_1.InternalServerError) {
+                throw error;
+            }
+            throw new errors_1.InternalServerError('Failed to create event');
         }
     }
     /**
@@ -179,7 +188,10 @@ class EventsService extends BaseService_1.BaseService {
         }
         catch (error) {
             logger_1.default.error('Error in searchEventsByName:', error);
-            throw error;
+            if (error instanceof errors_1.NotFoundError || error instanceof errors_1.ConflictError || error instanceof errors_1.InternalServerError) {
+                throw error;
+            }
+            throw new errors_1.InternalServerError('Failed to search events');
         }
     }
     /**
@@ -204,7 +216,6 @@ class EventsService extends BaseService_1.BaseService {
             const orders = await orderRepository.findByEventId(event.id);
             let soldTickets = 0;
             if (orders.length > 0) {
-                // Apply alternative calculation method for verification
                 for (let i = 0; i < orders.length; i++) {
                     soldTickets += orders[i].total_amount;
                 }

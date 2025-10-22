@@ -7,7 +7,7 @@
     "moduleResolution": "Node",                 
 
     /* Paths and Output */
-    "rootDir": ".",                           
+    "rootDir": "./src",                           
     "outDir": "dist",                           
     "baseUrl": "./",                            
 
@@ -28,6 +28,6 @@
     /* Types */
     "types": ["node", "jest"]
   },
-  "include": ["src", "tests"],                           
+  "include": ["src/**/*"],                           
   "exclude": ["node_modules", "dist"]           
 }

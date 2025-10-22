@@ -76,7 +76,7 @@ class GetEventByIdController extends BaseController_1.BaseController {
      */
     async getEventById(request, response) {
         const correlationId = request.correlationId || 'N/A';
-        const { eventId } = request.params;
+        const { eventId } = request.validated?.params || request.params;
         logger_1.default.debug(`[${correlationId}] Get event by ID controller called`, { eventId });
         try {
             const enrichedEvent = await events_service_1.EventsService.getEventById(eventId);

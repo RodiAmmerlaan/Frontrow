@@ -23,7 +23,8 @@ interface Event {
     end_time: string,
     total_tickets?: number,
     tickets_left?: number,
-    price?: number
+    price?: number,
+    assignedImage?: string 
 }
 
 interface Filters {
@@ -41,7 +42,7 @@ function EventPage({accessToken}:Props) {
     const [ loading, setLoading ] = useState(false);
     const [ error, setError ] = useState<string | null>(null);
     const [searchParams] = useSearchParams();
-    const searchTerm = searchParams.get('search');
+    const searchTerm = searchParams.get('search') || ''; 
     
     const [currentPage, setCurrentPage] = useState(1);
     const eventsPerPage = 5;
@@ -55,14 +56,21 @@ function EventPage({accessToken}:Props) {
         timeTo: ''
     });
     const [showFilters, setShowFilters] = useState(false);
-    const totalPages = Math.ceil(filteredEvents.length / eventsPerPage);
-    const startIndex = (currentPage - 1) * eventsPerPage;
-    const endIndex = startIndex + eventsPerPage;
-    const currentEvents = filteredEvents.slice(startIndex, endIndex);
-
+    const totalPages = Math.max(0, Math.ceil((filteredEvents && Array.isArray(filteredEvents) ? filteredEvents.length : 0) / eventsPerPage)) || 0;
+    const startIndex = Math.max(0, (currentPage - 1) * eventsPerPage);
+    const endIndex = Math.max(0, startIndex + eventsPerPage);
+    const currentEvents = (filteredEvents && Array.isArray(filteredEvents)) 
+        ? (filteredEvents.slice(Math.max(0, startIndex), Math.max(0, endIndex)) || []) 
+        : [];
     const applyFilters = useMemo(() => {
         return (events: Event[]) => {
+            if (!Array.isArray(events)) {
+                return [];
+            }
+            
             return events.filter(event => {
+                if (!event) return false;
+                
                 if (filters.dateFrom) {
                     const eventDate = new Date(event.start_time).toISOString().split('T')[0];
                     if (eventDate < filters.dateFrom) return false;
@@ -94,9 +102,13 @@ function EventPage({accessToken}:Props) {
     }, [filters]);
 
     useEffect(() => {
-        const filtered = applyFilters(allEvents);
-        setFilteredEvents(filtered);
-        setCurrentPage(1);
+        if (Array.isArray(allEvents)) {
+            const filtered = applyFilters(allEvents);
+            setFilteredEvents(Array.isArray(filtered) ? filtered : []);
+            setCurrentPage(1);
+        } else {
+            setFilteredEvents([]);
+        }
     }, [allEvents, filters, applyFilters]);
 
     const handleFilterChange = (filterName: keyof Filters, value: string) => {
@@ -117,36 +129,60 @@ function EventPage({accessToken}:Props) {
         });
     };
 
-    const hasActiveFilters = Object.values(filters).some(value => value !== '');
+    const hasActiveFilters = filters && typeof filters === 'object' ? Object.values(filters).some(value => value !== '') : false;
 
     const eventsWithImages = useMemo(() => {
-        const eventImages = [image1, image2, image3, image4, image5];
+        const eventImages = [image1, image2, image3, image4, image5].filter(img => img !== undefined);
         
-        if (currentEvents.length === 0) return [];
+        if (!currentEvents || !Array.isArray(currentEvents) || currentEvents.length === 0) return [];
+        
+        if (!eventImages || eventImages.length === 0) return currentEvents;
         
         const shuffledImages = [...eventImages].sort(() => Math.random() - 0.5);
         
+        if (!Array.isArray(shuffledImages) || shuffledImages.length === 0) {
+            return currentEvents.map(event => event || null);
+        }
+        
         return currentEvents.map((event, index) => {
+            if (!event) return null;
+            
+            if (shuffledImages.length === 0) return event;
+            
             const imageIndex = index % shuffledImages.length;
             
             return {
                 ...event,
                 assignedImage: shuffledImages[imageIndex]
             };
-        });
+        }).filter(event => event !== null);
     }, [currentEvents, currentPage]);
 
     async function getEvents(): Promise<Event[]> {
         return await api.get("/events")
             .then((response) => {
-                return response.data.events;
+                if (response.data && response.data.data && response.data.data.events) {
+                    return response.data.data.events;
+                }
+                return [];
+            })
+            .catch((error) => {
+                console.error('Error fetching events:', error);
+                return [];
             });
     }
 
     async function searchEvents(searchTerm: string): Promise<Event[]> {
         return await api.get(`/events/search?name=${encodeURIComponent(searchTerm)}`)
             .then((response) => {
-                return response.data.events;
+                if (response.data && response.data.data && response.data.data.events) {
+                    return response.data.data.events;
+                }
+                return [];
+            })
+            .catch((error) => {
+                console.error('Error searching events:', error);
+                return [];
             });
     }
 
@@ -162,16 +198,22 @@ function EventPage({accessToken}:Props) {
                 } else {
                     data = await getEvents();
                 }
-                setAllEvents(data);
+                if (Array.isArray(data)) {
+                    setAllEvents(data);
+                } else {
+                    setAllEvents([]);
+                }
             } catch (err) {
+                console.error('Error loading events:', err);
                 setError('Failed to load events');
+                setAllEvents([]); 
             } finally {
                 setLoading(false);
             }
         }
         loadEvents();
     }, [searchTerm])
-
+    
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -197,7 +239,7 @@ function EventPage({accessToken}:Props) {
                 </div>
             )}
 
-            {!loading && !error && allEvents.length > 0 && (
+            {!loading && !error && (allEvents && Array.isArray(allEvents) && allEvents.length > 0) && (
                 <div className="filter-section">
                     <div className="filter-header">
                         <button 
@@ -214,7 +256,7 @@ function EventPage({accessToken}:Props) {
                             </button>
                         )}
                         <div className="filter-results-count">
-                            {filteredEvents.length} van {allEvents.length} evenementen
+                            {(filteredEvents && Array.isArray(filteredEvents) ? filteredEvents.length : 0)} van {(allEvents && Array.isArray(allEvents) ? allEvents.length : 0)} evenementen
                         </div>
                     </div>
                     
@@ -293,39 +335,49 @@ function EventPage({accessToken}:Props) {
                 </div>
             )}
 
-            {!loading && !error && filteredEvents.length > 0 && (
+            {!loading && !error && (filteredEvents && Array.isArray(filteredEvents) && filteredEvents.length > 0) && (
                 <>
                     <div className="event-page-events-container">
-                        {eventsWithImages.map((x, index) =>
-                            <div key={x.id} className="event-page-event-item">
-                                <Card 
-                                    accessToken={accessToken} 
-                                    id={x.id} 
-                                    title={x.title} 
-                                    description={x.description} 
-                                    start_time={x.start_time} 
-                                    end_time={x.end_time} 
-                                    totalTickets={x.total_tickets} 
-                                    ticketsLeft={x.tickets_left} 
-                                    price={x.price}
-                                    assignedImage={x.assignedImage}
-                                />
+                        {eventsWithImages && Array.isArray(eventsWithImages) && eventsWithImages.length > 0 ? (
+                            eventsWithImages
+                                .filter((x): x is Event => x !== null)
+                                .map((x, index) => (
+                                    x && (
+                                        <div key={x.id || index} className="event-page-event-item">
+                                            <Card 
+                                                accessToken={accessToken || null} 
+                                                id={x.id || ''} 
+                                                title={x.title || ''} 
+                                                description={x.description} 
+                                                start_time={x.start_time || ''} 
+                                                end_time={x.end_time || ''} 
+                                                totalTickets={x.total_tickets} 
+                                                ticketsLeft={x.tickets_left} 
+                                                price={x.price}
+                                                assignedImage={x.assignedImage}
+                                            />
+                                        </div>
+                                    )
+                                ))
+                        ) : (
+                            <div className="event-page-no-events">
+                                <p>Geen evenementen gevonden</p>
                             </div>
                         )}
                     </div>
                     
                     <Pagination
-                        currentPage={currentPage}
-                        totalPages={totalPages}
-                        totalItems={filteredEvents.length}
-                        itemsPerPage={eventsPerPage}
-                        hasActiveFilters={hasActiveFilters}
+                        currentPage={currentPage && typeof currentPage === 'number' ? currentPage : 1}
+                        totalPages={totalPages && typeof totalPages === 'number' ? totalPages : 0}
+                        totalItems={filteredEvents && Array.isArray(filteredEvents) ? filteredEvents.length : 0}
+                        itemsPerPage={eventsPerPage && typeof eventsPerPage === 'number' ? eventsPerPage : 5}
+                        hasActiveFilters={hasActiveFilters ? hasActiveFilters : false}
                         onPageChange={handlePageChange}
                     />
                 </>
             )}
 
-            {!loading && !error && allEvents.length === 0 && (
+            {!loading && !error && (allEvents && Array.isArray(allEvents) && allEvents.length === 0) && (
                 <div className="event-page-no-events">
                     <p>
                         {searchTerm 
@@ -336,7 +388,7 @@ function EventPage({accessToken}:Props) {
                 </div>
             )}
             
-            {!loading && !error && allEvents.length > 0 && filteredEvents.length === 0 && (
+            {!loading && !error && (allEvents && Array.isArray(allEvents) && allEvents.length > 0) && (filteredEvents && Array.isArray(filteredEvents) && filteredEvents.length === 0) && (
                 <div className="event-page-no-events">
                     <p>Geen evenementen gevonden die voldoen aan de filters</p>
                     <button className="clear-filters-btn" onClick={clearFilters}>

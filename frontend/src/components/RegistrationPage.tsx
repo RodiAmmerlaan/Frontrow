@@ -38,7 +38,7 @@ function RegistrationPage( { onLogin }: Props) {
                 const response = await api.get(`/addressCheck?postalCode=${encodeURIComponent(form.postal_code)}&houseNumber=${encodeURIComponent(form.house_number)}`);
                 if(!(response.status === 200)) setError("Adres niet gevonden");
 
-                const data = response.data;
+                const data = response.data.data;
 
                 if (data.city && data.street) {
                     setForm((prev) => ({

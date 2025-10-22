@@ -132,3 +132,149 @@
 2025-10-15 00:12:24:1224 [35mhttp[39m: [35m[1760483544561-164892] GET /api/v1/events - Request started[39m
 2025-10-15 00:12:24:1224 [33mwarn[39m: [33mCustom error: VALIDATION_ERROR - Validation failed: Cannot set property query of #<IncomingMessage> which has only a getter[39m
 2025-10-15 00:12:24:1224 [35mhttp[39m: [35m[1760483544561-164892] GET /api/v1/events - Response status: 400[39m
+2025-10-21 21:10:45:1045 [32minfo[39m: [32mServer is running on port 3000[39m
+2025-10-21 21:11:07:117 [35mhttp[39m: [35m[1761077467835-498460] GET /api/v1/events - Request started[39m
+2025-10-21 21:11:07:117 [37mdebug[39m: [37m[1761077467835-498460] Get all events controller called[39m
+2025-10-21 21:11:07:117 [37mdebug[39m: [37mEventsService.getEnrichedEvents called[39m
+2025-10-21 21:11:07:117 [31merror[39m: [31mError in getEnrichedEvents: [39m
+[31mInvalid `this.prisma.events.findMany()` invocation in[39m
+[31mC:\Users\ammer\Documents\OELAN\FrontRow - kopie\Frontrow\backend\src\repositories\EventRepositoryImpl.ts:21:37[39m
+
+[31m  18  * @returns A promise that resolves to an array of all events[39m
+[31m  19  */[39m
+[31m  20 async findAll(): Promise<Events[]> {[39m
+[31m→ 21   return await this.prisma.events.findMany([39m
+[31merror: Environment variable not found: DATABASE_URL.[39m
+[31m  -->  schema.prisma:7[39m
+[31m   | [39m
+[31m 6 |   provider = "postgresql"[39m
+[31m 7 |   url      = env("DATABASE_URL")[39m
+[31m   | [39m
+
+[31mValidation Error Count: 1[39m
+2025-10-21 21:11:07:117 [31merror[39m: [31m[1761077467835-498460] Error in getAllEventsController: Failed to retrieve events[39m
+2025-10-21 21:11:07:117 [31merror[39m: [31m[1761077467835-498460] Internal server error in getAllEventsController[39m
+2025-10-21 21:11:07:117 [31merror[39m: [31mUnexpected error: Failed to retrieve events[39m
+2025-10-21 21:11:07:117 [33mwarn[39m: [33mCustom error: INTERNAL_SERVER_ERROR - Failed to retrieve events[39m
+2025-10-21 21:11:07:117 [35mhttp[39m: [35m[1761077467835-498460] GET /api/v1/events - Response status: 500[39m
+2025-10-21 21:11:07:117 [35mhttp[39m: [35m[1761077467938-468242] GET /api/v1/events - Request started[39m
+2025-10-21 21:11:07:117 [37mdebug[39m: [37m[1761077467938-468242] Get all events controller called[39m
+2025-10-21 21:11:07:117 [37mdebug[39m: [37mEventsService.getEnrichedEvents called[39m
+2025-10-21 21:11:07:117 [31merror[39m: [31mError in getEnrichedEvents: [39m
+[31mInvalid `this.prisma.events.findMany()` invocation in[39m
+[31mC:\Users\ammer\Documents\OELAN\FrontRow - kopie\Frontrow\backend\src\repositories\EventRepositoryImpl.ts:21:37[39m
+
+[31m  18  * @returns A promise that resolves to an array of all events[39m
+[31m  19  */[39m
+[31m  20 async findAll(): Promise<Events[]> {[39m
+[31m→ 21   return await this.prisma.events.findMany([39m
+[31merror: Environment variable not found: DATABASE_URL.[39m
+[31m  -->  schema.prisma:7[39m
+[31m   | [39m
+[31m 6 |   provider = "postgresql"[39m
+[31m 7 |   url      = env("DATABASE_URL")[39m
+[31m   | [39m
+
+[31mValidation Error Count: 1[39m
+2025-10-21 21:11:07:117 [31merror[39m: [31m[1761077467938-468242] Error in getAllEventsController: Failed to retrieve events[39m
+2025-10-21 21:11:07:117 [31merror[39m: [31m[1761077467938-468242] Internal server error in getAllEventsController[39m
+2025-10-21 21:11:07:117 [31merror[39m: [31mUnexpected error: Failed to retrieve events[39m
+2025-10-21 21:11:07:117 [33mwarn[39m: [33mCustom error: INTERNAL_SERVER_ERROR - Failed to retrieve events[39m
+2025-10-21 21:11:07:117 [35mhttp[39m: [35m[1761077467938-468242] GET /api/v1/events - Response status: 500[39m
+2025-10-22 23:27:01:271 [32minfo[39m: [32mServer is running on port 3000[39m
+2025-10-22 23:27:29:2729 [35mhttp[39m: [35m[1761172049799-988203] GET /api/v1/events - Request started[39m
+2025-10-22 23:27:29:2729 [37mdebug[39m: [37m[1761172049799-988203] Get all events controller called[39m
+2025-10-22 23:27:29:2729 [37mdebug[39m: [37mEventsService.getEnrichedEvents called[39m
+2025-10-22 23:27:29:2729 [31merror[39m: [31mError in getEnrichedEvents: [39m
+[31mInvalid `this.prisma.events.findMany()` invocation in[39m
+[31mC:\Users\ammer\Documents\OELAN\FrontRow - kopie\Frontrow\backend\src\repositories\EventRepositoryImpl.ts:21:37[39m
+
+[31m  18  * @returns A promise that resolves to an array of all events[39m
+[31m  19  */[39m
+[31m  20 async findAll(): Promise<Events[]> {[39m
+[31m→ 21   return await this.prisma.events.findMany([39m
+[31merror: Environment variable not found: DATABASE_URL.[39m
+[31m  -->  schema.prisma:7[39m
+[31m   | [39m
+[31m 6 |   provider = "postgresql"[39m
+[31m 7 |   url      = env("DATABASE_URL")[39m
+[31m   | [39m
+
+[31mValidation Error Count: 1[39m
+2025-10-22 23:27:29:2729 [31merror[39m: [31m[1761172049799-988203] Error in getAllEventsController: Failed to retrieve events[39m
+2025-10-22 23:27:29:2729 [31merror[39m: [31m[1761172049799-988203] Internal server error in getAllEventsController[39m
+2025-10-22 23:27:29:2729 [31merror[39m: [31mUnexpected error: Failed to retrieve events[39m
+2025-10-22 23:27:29:2729 [33mwarn[39m: [33mCustom error: INTERNAL_SERVER_ERROR - Failed to retrieve events[39m
+2025-10-22 23:27:29:2729 [35mhttp[39m: [35m[1761172049799-988203] GET /api/v1/events - Response status: 500[39m
+2025-10-22 23:27:29:2729 [35mhttp[39m: [35m[1761172049889-179257] GET /api/v1/events - Request started[39m
+2025-10-22 23:27:29:2729 [37mdebug[39m: [37m[1761172049889-179257] Get all events controller called[39m
+2025-10-22 23:27:29:2729 [37mdebug[39m: [37mEventsService.getEnrichedEvents called[39m
+2025-10-22 23:27:29:2729 [31merror[39m: [31mError in getEnrichedEvents: [39m
+[31mInvalid `this.prisma.events.findMany()` invocation in[39m
+[31mC:\Users\ammer\Documents\OELAN\FrontRow - kopie\Frontrow\backend\src\repositories\EventRepositoryImpl.ts:21:37[39m
+
+[31m  18  * @returns A promise that resolves to an array of all events[39m
+[31m  19  */[39m
+[31m  20 async findAll(): Promise<Events[]> {[39m
+[31m→ 21   return await this.prisma.events.findMany([39m
+[31merror: Environment variable not found: DATABASE_URL.[39m
+[31m  -->  schema.prisma:7[39m
+[31m   | [39m
+[31m 6 |   provider = "postgresql"[39m
+[31m 7 |   url      = env("DATABASE_URL")[39m
+[31m   | [39m
+
+[31mValidation Error Count: 1[39m
+2025-10-22 23:27:29:2729 [31merror[39m: [31m[1761172049889-179257] Error in getAllEventsController: Failed to retrieve events[39m
+2025-10-22 23:27:29:2729 [31merror[39m: [31m[1761172049889-179257] Internal server error in getAllEventsController[39m
+2025-10-22 23:27:29:2729 [31merror[39m: [31mUnexpected error: Failed to retrieve events[39m
+2025-10-22 23:27:29:2729 [33mwarn[39m: [33mCustom error: INTERNAL_SERVER_ERROR - Failed to retrieve events[39m
+2025-10-22 23:27:29:2729 [35mhttp[39m: [35m[1761172049889-179257] GET /api/v1/events - Response status: 500[39m
+2025-10-22 23:27:29:2729 [35mhttp[39m: [35m[1761172049918-50966] GET /api/v1/events - Request started[39m
+2025-10-22 23:27:29:2729 [37mdebug[39m: [37m[1761172049918-50966] Get all events controller called[39m
+2025-10-22 23:27:29:2729 [37mdebug[39m: [37mEventsService.getEnrichedEvents called[39m
+2025-10-22 23:27:29:2729 [31merror[39m: [31mError in getEnrichedEvents: [39m
+[31mInvalid `this.prisma.events.findMany()` invocation in[39m
+[31mC:\Users\ammer\Documents\OELAN\FrontRow - kopie\Frontrow\backend\src\repositories\EventRepositoryImpl.ts:21:37[39m
+
+[31m  18  * @returns A promise that resolves to an array of all events[39m
+[31m  19  */[39m
+[31m  20 async findAll(): Promise<Events[]> {[39m
+[31m→ 21   return await this.prisma.events.findMany([39m
+[31merror: Environment variable not found: DATABASE_URL.[39m
+[31m  -->  schema.prisma:7[39m
+[31m   | [39m
+[31m 6 |   provider = "postgresql"[39m
+[31m 7 |   url      = env("DATABASE_URL")[39m
+[31m   | [39m
+
+[31mValidation Error Count: 1[39m
+2025-10-22 23:27:29:2729 [31merror[39m: [31m[1761172049918-50966] Error in getAllEventsController: Failed to retrieve events[39m
+2025-10-22 23:27:29:2729 [31merror[39m: [31m[1761172049918-50966] Internal server error in getAllEventsController[39m
+2025-10-22 23:27:29:2729 [31merror[39m: [31mUnexpected error: Failed to retrieve events[39m
+2025-10-22 23:27:29:2729 [33mwarn[39m: [33mCustom error: INTERNAL_SERVER_ERROR - Failed to retrieve events[39m
+2025-10-22 23:27:29:2729 [35mhttp[39m: [35m[1761172049918-50966] GET /api/v1/events - Response status: 500[39m
+2025-10-22 23:27:29:2729 [35mhttp[39m: [35m[1761172049929-8091] GET /api/v1/events - Request started[39m
+2025-10-22 23:27:29:2729 [37mdebug[39m: [37m[1761172049929-8091] Get all events controller called[39m
+2025-10-22 23:27:29:2729 [37mdebug[39m: [37mEventsService.getEnrichedEvents called[39m
+2025-10-22 23:27:29:2729 [31merror[39m: [31mError in getEnrichedEvents: [39m
+[31mInvalid `this.prisma.events.findMany()` invocation in[39m
+[31mC:\Users\ammer\Documents\OELAN\FrontRow - kopie\Frontrow\backend\src\repositories\EventRepositoryImpl.ts:21:37[39m
+
+[31m  18  * @returns A promise that resolves to an array of all events[39m
+[31m  19  */[39m
+[31m  20 async findAll(): Promise<Events[]> {[39m
+[31m→ 21   return await this.prisma.events.findMany([39m
+[31merror: Environment variable not found: DATABASE_URL.[39m
+[31m  -->  schema.prisma:7[39m
+[31m   | [39m
+[31m 6 |   provider = "postgresql"[39m
+[31m 7 |   url      = env("DATABASE_URL")[39m
+[31m   | [39m
+
+[31mValidation Error Count: 1[39m
+2025-10-22 23:27:29:2729 [31merror[39m: [31m[1761172049929-8091] Error in getAllEventsController: Failed to retrieve events[39m
+2025-10-22 23:27:29:2729 [31merror[39m: [31m[1761172049929-8091] Internal server error in getAllEventsController[39m
+2025-10-22 23:27:29:2729 [31merror[39m: [31mUnexpected error: Failed to retrieve events[39m
+2025-10-22 23:27:29:2729 [33mwarn[39m: [33mCustom error: INTERNAL_SERVER_ERROR - Failed to retrieve events[39m
+2025-10-22 23:27:29:2729 [35mhttp[39m: [35m[1761172049929-8091] GET /api/v1/events - Response status: 500[39m

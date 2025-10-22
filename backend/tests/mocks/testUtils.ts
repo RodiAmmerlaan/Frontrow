@@ -21,6 +21,6 @@ export const mockRefreshTokenRecord = {
   user_id: 'user-123',
   hashedtoken: mockRefreshToken,
   createdat: new Date(),
-  expiresat: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days from now
+  expiresat: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
   revokedat: null
 };

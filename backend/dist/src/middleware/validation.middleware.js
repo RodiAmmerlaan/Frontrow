@@ -9,6 +9,7 @@ exports.validateRequest = validateRequest;
 const joi_1 = __importDefault(require("joi"));
 const escape_html_1 = __importDefault(require("escape-html"));
 const CustomErrors_1 = require("../errors/CustomErrors");
+require("../interfaces/express.interface");
 /**
  * Sanitizes string values to prevent XSS attacks
  * @param data - The data to sanitize
@@ -53,7 +54,10 @@ function validateRequest(schema, options = { source: 'body' }) {
                 const errorMessage = error.details.map(detail => detail.message).join(', ');
                 throw new CustomErrors_1.ValidationError(errorMessage);
             }
-            setDataOnRequest(request, options.source, value);
+            if (!request.validated) {
+                request.validated = {};
+            }
+            request.validated[options.source] = value;
             next();
         }
         catch (error) {
@@ -80,25 +84,6 @@ function getDataFromRequest(request, source) {
             return request.params;
         default:
             return request.body;
-    }
-}
-/**
- * Sets validated data back on the request object
- * @param request - Express request object
- * @param source - Where to set the data
- * @param data - Validated data
- */
-function setDataOnRequest(request, source, data) {
-    switch (source) {
-        case 'body':
-            request.body = data;
-            break;
-        case 'query':
-            request.query = data;
-            break;
-        case 'params':
-            request.params = data;
-            break;
     }
 }
 exports.ValidationSchemas = {

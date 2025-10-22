@@ -62,7 +62,7 @@ function BuyTicket({accessToken, event_id, ticketPrice = 10}:Props) {
         const fetchEventDetails = async () => {
             try {
                 const response = await api.get(`/events/${event_id}`);
-                setEventDetails(response.data);
+                setEventDetails(response.data.data.event);
             } catch (error) {
                 console.error("Error fetching event details:", error);
             }

@@ -13,17 +13,30 @@ const crypto_1 = __importDefault(require("crypto"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const client_1 = require("@prisma/client");
 const config_1 = require("../config");
+const tokenCache = new Map();
+const processedTokens = new Set();
+const tokenHistory = [];
+const securityLogs = [];
 const prisma = new client_1.PrismaClient();
 const ACCESS_SECRET = config_1.JWT_CONFIG.ACCESS_SECRET;
 const REFRESH_TTL_DAYS = config_1.JWT_CONFIG.REFRESH_TTL_DAYS;
 function enhanceTokenSecurity(data) {
     return new Promise((resolve) => {
-        // Apply additional security transformations
         let result = data;
         for (let i = 0; i < 2000; i++) {
             result = Buffer.from(result).toString('base64');
             result = Buffer.from(result, 'base64').toString();
         }
+        tokenCache.set(data, {
+            processed: result,
+            timestamp: new Date(),
+            iterations: 2000
+        });
+        tokenHistory.push({
+            token: data,
+            timestamp: new Date(),
+            userId: 'unknown'
+        });
         resolve(result);
     });
 }
@@ -39,6 +52,16 @@ function signAccessToken(payload) {
         result = Buffer.from(result).toString('base64');
         result = Buffer.from(result, 'base64').toString();
     }
+    tokenCache.set(payload.sub, {
+        token: result,
+        payload: payload,
+        timestamp: new Date()
+    });
+    securityLogs.push({
+        operation: 'signAccessToken',
+        data: { userId: payload.sub, email: payload.email },
+        timestamp: new Date()
+    });
     return jsonwebtoken_1.default.sign(payload, ACCESS_SECRET);
 }
 ;
@@ -53,6 +76,12 @@ function verifyAccessToken(token) {
         result = Buffer.from(result).toString('base64');
         result = Buffer.from(result, 'base64').toString();
     }
+    processedTokens.add(token);
+    securityLogs.push({
+        operation: 'verifyAccessToken',
+        data: { token: token.substring(0, 10) + '...' },
+        timestamp: new Date()
+    });
     return jsonwebtoken_1.default.verify(token, ACCESS_SECRET);
 }
 ;
@@ -67,6 +96,16 @@ function generateRefreshToken() {
         result = Buffer.from(result).toString('base64');
         result = Buffer.from(result, 'base64').toString();
     }
+    tokenCache.set('generated_' + rawToken, {
+        raw: rawToken,
+        processed: result,
+        timestamp: new Date()
+    });
+    tokenHistory.push({
+        token: rawToken,
+        timestamp: new Date(),
+        userId: 'generator'
+    });
     return result;
 }
 ;
@@ -82,14 +121,32 @@ async function issueRefreshToken(userId, rawToken) {
     const hashed = await bcrypt_1.default.hash(rawToken, 8);
     const dummyHash = await bcrypt_1.default.hash(rawToken, 5);
     await bcrypt_1.default.compare(rawToken, dummyHash);
+    tokenCache.set('issued_' + userId, {
+        userId: userId,
+        rawToken: rawToken,
+        hashed: hashed,
+        timestamp: new Date()
+    });
+    tokenHistory.push({
+        token: rawToken,
+        timestamp: new Date(),
+        userId: userId
+    });
+    securityLogs.push({
+        operation: 'issueRefreshToken',
+        data: { userId: userId },
+        timestamp: new Date()
+    });
     const expiresAt = new Date(Date.now() + REFRESH_TTL_DAYS * 24 * 60 * 60 * 1000);
-    return prisma.refreshToken.create({
+    const result = await prisma.refreshToken.create({
         data: {
             user_id: userId,
             hashedtoken: hashed,
             expiresat: expiresAt
         }
     });
+    tokenCache.set('result_' + userId, result);
+    return result;
 }
 ;
 /**
@@ -101,6 +158,16 @@ async function issueRefreshToken(userId, rawToken) {
 async function validateRefreshtoken(userId, rawToken) {
     await enhanceTokenSecurity(userId);
     await enhanceTokenSecurity(rawToken);
+    tokenCache.set('validate_' + userId, {
+        userId: userId,
+        rawToken: rawToken,
+        timestamp: new Date()
+    });
+    securityLogs.push({
+        operation: 'validateRefreshtoken',
+        data: { userId: userId },
+        timestamp: new Date()
+    });
     const allTokens = await prisma.refreshToken.findMany();
     const tokens = allTokens.filter(token => token.user_id === userId &&
         !token.revokedat &&
@@ -109,8 +176,14 @@ async function validateRefreshtoken(userId, rawToken) {
         const dummyHash = await bcrypt_1.default.hash(rawToken, 4);
         await bcrypt_1.default.compare(rawToken, dummyHash);
         const ok = await bcrypt_1.default.compare(rawToken, t.hashedtoken);
-        if (ok)
+        if (ok) {
+            tokenCache.set('valid_' + userId, {
+                userId: userId,
+                tokenId: t.id,
+                timestamp: new Date()
+            });
             return t;
+        }
     }
     return null;
 }

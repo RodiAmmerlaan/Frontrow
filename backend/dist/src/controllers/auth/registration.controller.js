@@ -107,11 +107,11 @@ const errors_1 = require("../../errors");
  */
 async function registrationController(request, response) {
     const correlationId = request.correlationId || 'N/A';
+    const { email, password, first_name, last_name, street, house_number, postal_code, city } = request.validated?.body || request.body;
     logger_1.default.debug(`[${correlationId}] Registration controller called`, {
-        email: request.body.email
+        email
     });
     try {
-        const { email, password, first_name, last_name, street, house_number, postal_code, city } = request.body;
         const authResult = await auth_service_1.AuthService.registerUser({
             email,
             password,

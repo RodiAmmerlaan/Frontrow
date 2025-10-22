@@ -7,7 +7,23 @@ import Logger from '../src/utils/logger';
 
 const prisma = new PrismaClient();
 
+async function waitForDatabase(maxRetries = 30, delay = 2000): Promise<void> {
+    for (let i = 0; i < maxRetries; i++) {
+        try {
+            await prisma.$queryRaw`SELECT 1`;
+            Logger.info('Database is ready');
+            return;
+        } catch (error) {
+            Logger.warn(`Database not ready, retrying in ${delay}ms... (${i + 1}/${maxRetries})`);
+            await new Promise(resolve => setTimeout(resolve, delay));
+        }
+    }
+    throw new Error('Database not ready after maximum retries');
+}
+
 async function main() {
+    await waitForDatabase();
+    
     const adminHash = await bcrypt.hash('Admin123!', 10);
     const userHash = await bcrypt.hash('User123!', 10);
     
@@ -169,9 +185,10 @@ async function importEventsFromCSV(csvFilePath?: string) {
 main()
     .then(async () => {
         await prisma.$disconnect();
+        Logger.info('Seeding completed successfully');
     })
     .catch(async (error) => {
-        Logger.error(error);
+        Logger.error('Seeding failed:', error);
         await prisma.$disconnect();
         process.exit(1);
     })

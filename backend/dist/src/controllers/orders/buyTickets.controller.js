@@ -128,7 +128,7 @@ class BuyTicketsController extends BaseController_1.BaseController {
      */
     async buyTickets(request, response) {
         const correlationId = request.correlationId || 'N/A';
-        const { event_id, user_id, total_amount } = request.body;
+        const { event_id, user_id, total_amount } = request.validated?.body || request.body;
         logger_1.default.debug(`[${correlationId}] Buy tickets controller called`, { event_id, user_id, total_amount });
         try {
             const tickets = await orders_service_1.OrdersService.processTicketPurchase(event_id, user_id, total_amount);

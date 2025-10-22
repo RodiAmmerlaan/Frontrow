@@ -114,11 +114,11 @@ export default function ReportsPage({ accessToken }: ReportsPageProps) {
         
         try {
             if (activeTab === 'sales') {
-                const response = await api.get<SalesOverviewResponse>(`/events/sales-overview?month=${filters.month || ''}&year=${filters.year || ''}`);
-                setSalesData(response.data);
+                const response = await api.get(`/events/sales-overview?month=${filters.month || ''}&year=${filters.year || ''}`);
+                setSalesData(response.data.data);
             } else {
-                const response = await api.get<UserPurchaseReportResponse>(`/orders/user-purchase-report?month=${filters.month || ''}&year=${filters.year || ''}`);
-                setUserPurchaseData(response.data);
+                const response = await api.get(`/events/user-purchase-report?month=${filters.month || ''}&year=${filters.year || ''}`);
+                setUserPurchaseData(response.data.data);
             }
         } catch (err: any) {
             setError('Fout bij het ophalen van rapportagedata');
@@ -144,11 +144,11 @@ export default function ReportsPage({ accessToken }: ReportsPageProps) {
         
         try {
             if (activeTab === 'sales') {
-                const response = await api.get<SalesOverviewResponse>(`/events/sales-overview`);
-                setSalesData(response.data);
+                const response = await api.get(`/events/sales-overview`);
+                setSalesData(response.data.data);
             } else {
-                const response = await api.get<UserPurchaseReportResponse>(`/orders/user-purchase-report`);
-                setUserPurchaseData(response.data);
+                const response = await api.get(`/events/user-purchase-report`);
+                setUserPurchaseData(response.data.data);
             }
         } catch (err: any) {
             setError('Fout bij het ophalen van rapportagedata');

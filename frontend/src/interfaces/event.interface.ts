@@ -7,4 +7,5 @@ export interface EventOverview {
     total_tickets?: number;
     tickets_left?: number;
     price?: number;
+    assignedImage?: string;
 }

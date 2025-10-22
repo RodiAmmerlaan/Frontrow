@@ -34,14 +34,14 @@ export default function EventDetailsPage({ accessToken }: Props) {
                 setLoading(true);
                 
                 const uuidRegex = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
-                if (!eventId || !uuidRegex.test(eventId)) {``
+                if (!eventId || !uuidRegex.test(eventId)) {
                     setError('Ongeldig event ID formaat');
                     setLoading(false);
                     return;
                 }
                 
                 const response = await api.get(`/events/${eventId}`);
-                const eventDetails = response.data;
+                const eventDetails = response.data.data.event;
                 
                 if (eventDetails) {
                     setEvent(eventDetails);

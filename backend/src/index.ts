@@ -4,6 +4,7 @@ import { authRouter } from './controllers/auth/auth.router';
 import { eventsRouter } from './controllers/events/events.router';
 import { ordersRouter } from './controllers/orders/orders.router';
 import { openApiRouter } from './controllers/openapi/openapi.router';
+import { addressCheckRouter } from './controllers/addressCheck.router';
 import { errorHandler } from './middleware/errorHandler.middleware';
 import { correlationIdMiddleware } from './middleware/correlationId.middleware';
 import Logger from './utils/logger';
@@ -24,6 +25,7 @@ app.use(express.json());
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/events', eventsRouter);
 app.use('/api/v1/orders', ordersRouter);
+app.use('/api/v1/addressCheck', addressCheckRouter);
 app.use('/api/v1/docs', openApiRouter);
 
 app.use(errorHandler);
