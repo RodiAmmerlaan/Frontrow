@@ -48,11 +48,9 @@ function App() {
 
   const fetchUserDetails = useCallback(async (token: string) => {
     try {
-      // Set the access token in the API utility before making the request
       setAccessToken(token);
       
       const response = await api.get('/auth/profile');
-      // Updated to handle new response format with success/data structure
       const userData = response.data && response.data.success && response.data.data ? response.data.data : null;
       
       if (userData) {
@@ -91,13 +89,10 @@ function App() {
       }
     });
     
-    // Check if user is already logged in by checking for refresh token cookie
     const hasRefreshToken = getCookie('refresh_token');
     if (hasRefreshToken) {
-      // Try to refresh the access token
       api.post('/auth/refresh', {}, { withCredentials: true })
         .then(res => {
-          // Updated to handle new response format with success/data structure
           const accessToken = res.data && res.data.success && res.data.data && res.data.data.access_token 
             ? res.data.data.access_token 
             : null;
@@ -106,13 +101,11 @@ function App() {
             setAccessToken(accessToken);
             fetchUserDetails(accessToken);
           } else {
-            // If refresh fails, clear the cookie state
             setToken(null);
             setAccessToken(null);
           }
         })
         .catch(() => {
-          // If refresh fails, clear the cookie state
           setToken(null);
           setAccessToken(null);
         })
@@ -127,10 +120,8 @@ function App() {
   if (loading) return <p>Laden...</p>;
 
   function logout(): void {
-    // Call logout endpoint to clear the refresh token cookie
     api.post('/auth/logout', {}, { withCredentials: true })
       .then(res => {
-        // Handle the response if needed
         if (res.data && res.data.success) {
           console.log('Logout successful');
         }

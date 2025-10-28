@@ -23,13 +23,7 @@ export async function validateOpenApiSpec(): Promise<boolean> {
       console.error('API paths missing');
       return false;
     }
-    
-    console.log('OpenAPI specification generated successfully');
-    console.log(`OpenAPI Version: ${specs.openapi}`);
-    console.log(`API Title: ${specs.info.title}`);
-    console.log(`API Version: ${specs.info.version}`);
-    console.log(`Number of paths: ${Object.keys(specs.paths).length}`);
-    
+        
     return true;
   } catch (error) {
     console.error('Error generating OpenAPI specification:', error);
@@ -40,10 +34,8 @@ export async function validateOpenApiSpec(): Promise<boolean> {
 if (require.main === module) {
   validateOpenApiSpec().then(isValid => {
     if (isValid) {
-      console.log('OpenAPI specification is valid');
       process.exit(0);
     } else {
-      console.error('OpenAPI specification is invalid');
       process.exit(1);
     }
   });

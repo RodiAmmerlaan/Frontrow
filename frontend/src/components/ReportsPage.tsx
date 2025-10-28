@@ -115,7 +115,6 @@ export default function ReportsPage({ accessToken }: ReportsPageProps) {
         try {
             if (activeTab === 'sales') {
                 const response = await api.get(`/events/sales-overview?month=${filters.month || ''}&year=${filters.year || ''}`);
-                // Updated to handle new response format with success/data structure
                 if (response.data && response.data.success && response.data.data) {
                     setSalesData(response.data.data);
                 } else if (response.data && !response.data.success && response.data.error === "FORBIDDEN") {
@@ -123,7 +122,6 @@ export default function ReportsPage({ accessToken }: ReportsPageProps) {
                 }
             } else {
                 const response = await api.get(`/events/user-purchase-report?month=${filters.month || ''}&year=${filters.year || ''}`);
-                // Updated to handle new response format with success/data structure
                 if (response.data && response.data.success && response.data.data) {
                     setUserPurchaseData(response.data.data);
                 } else if (response.data && !response.data.success && response.data.error === "FORBIDDEN") {
@@ -131,7 +129,6 @@ export default function ReportsPage({ accessToken }: ReportsPageProps) {
                 }
             }
         } catch (err: any) {
-            // Handle network errors or other unexpected errors
             if (err.response && err.response.data && err.response.data.error === "FORBIDDEN") {
                 setError('Access denied. Admin role required');
             } else {
@@ -160,7 +157,6 @@ export default function ReportsPage({ accessToken }: ReportsPageProps) {
         try {
             if (activeTab === 'sales') {
                 const response = await api.get(`/events/sales-overview`);
-                // Updated to handle new response format with success/data structure
                 if (response.data && response.data.success && response.data.data) {
                     setSalesData(response.data.data);
                 } else if (response.data && !response.data.success && response.data.error === "FORBIDDEN") {
@@ -168,7 +164,6 @@ export default function ReportsPage({ accessToken }: ReportsPageProps) {
                 }
             } else {
                 const response = await api.get(`/events/user-purchase-report`);
-                // Updated to handle new response format with success/data structure
                 if (response.data && response.data.success && response.data.data) {
                     setUserPurchaseData(response.data.data);
                 } else if (response.data && !response.data.success && response.data.error === "FORBIDDEN") {
@@ -176,7 +171,6 @@ export default function ReportsPage({ accessToken }: ReportsPageProps) {
                 }
             }
         } catch (err: any) {
-            // Handle network errors or other unexpected errors
             if (err.response && err.response.data && err.response.data.error === "FORBIDDEN") {
                 setError('Access denied. Admin role required');
             } else {

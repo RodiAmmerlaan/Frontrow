@@ -30,6 +30,5 @@ export function clearRefreshCookie(response: Response) {
  * @returns The refresh token if found, or null if not present
  */
 export function getRefreshCookie(request: Request) {
-    // Use Express's built-in cookie parsing instead of manual parsing
     return request.cookies?.refresh_token || null;
 }

@@ -65,7 +65,6 @@ function BuyTicket({accessToken, event_id, ticketPrice = 10}:Props) {
         const fetchEventDetails = async () => {
             try {
                 const response = await api.get(`/events/${event_id}`);
-                // Updated to handle new response format with success/data structure
                 const eventDetails = response.data && response.data.success && response.data.data && response.data.data.event 
                     ? response.data.data.event 
                     : null;

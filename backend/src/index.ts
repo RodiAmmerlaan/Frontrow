@@ -15,7 +15,7 @@ const app = express();
 const PORT = SERVER_CONFIG.PORT;
 
 app.use(correlationIdMiddleware);
-app.use(cookieParser()); // Add cookie parser middleware
+app.use(cookieParser());
 app.use(cors(
    {
         origin: SERVER_CONFIG.CORS_ORIGIN,
