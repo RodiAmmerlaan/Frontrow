@@ -25,7 +25,10 @@ interface Ticket {
 }
 
 interface BuyTicketsResponse {
-    tickets: Ticket[];
+    success: boolean;
+    data: {
+        tickets: Ticket[];
+    };
 }
 
 interface EventDetails {
@@ -62,7 +65,13 @@ function BuyTicket({accessToken, event_id, ticketPrice = 10}:Props) {
         const fetchEventDetails = async () => {
             try {
                 const response = await api.get(`/events/${event_id}`);
-                setEventDetails(response.data.data.event);
+                // Updated to handle new response format with success/data structure
+                const eventDetails = response.data && response.data.success && response.data.data && response.data.data.event 
+                    ? response.data.data.event 
+                    : null;
+                if (eventDetails) {
+                    setEventDetails(eventDetails);
+                }
             } catch (error) {
                 console.error("Error fetching event details:", error);
             }
@@ -90,15 +99,20 @@ function BuyTicket({accessToken, event_id, ticketPrice = 10}:Props) {
         setError("");
         
         try {
-            const response = await api.post<BuyTicketsResponse>("/orders/buy", { 
+            const response = await api.post<BuyTicketsResponse>("/orders/buy-tickets", { 
                 event_id, 
                 user_id: currentUserId, 
                 total_amount,
                 payment_method: paymentMethod
             });
             
-            setPurchasedTickets(response.data.tickets);
-            setCurrentStep('success');
+            if (response.data && response.data.success && response.data.data && response.data.data.tickets) {
+                setPurchasedTickets(response.data.data.tickets);
+                setCurrentStep('success');
+            } else {
+                setError("Kan Ticket niet kopen");
+                setCurrentStep('quantity');
+            }
             
         } catch (error) {
             setError("Kan Ticket niet kopen");
@@ -160,7 +174,7 @@ function BuyTicket({accessToken, event_id, ticketPrice = 10}:Props) {
                                 </div>
                                 <div className="buy-ticket-event-field">
                                     <span className="buy-ticket-event-label">Prijs per ticket:</span>
-                                    <span className="buy-ticket-event-value">€{eventDetails.price?.toFixed(2)}</span>
+                                    <span className="buy-ticket-event-value">€{(eventDetails.price || 0).toFixed(2)}</span>
                                 </div>
                                 <div className="buy-ticket-event-field">
                                     <span className="buy-ticket-event-label">Aantal tickets:</span>

@@ -11,6 +11,13 @@ interface AccessToken {
     access_token: string;
 }
 
+interface RegistrationResponse {
+    success: boolean;
+    data: {
+        access_token: string;
+    };
+}
+
 function RegistrationPage( { onLogin }: Props) {
     const [form, setForm] = useState({
         email: "",
@@ -36,18 +43,21 @@ function RegistrationPage( { onLogin }: Props) {
             try {
                 setLoadingAddress(true);
                 const response = await api.get(`/addressCheck?postalCode=${encodeURIComponent(form.postal_code)}&houseNumber=${encodeURIComponent(form.house_number)}`);
-                if(!(response.status === 200)) setError("Adres niet gevonden");
+                if (response.data && response.data.success && response.data.data) {
+                    const data = response.data.data;
 
-                const data = response.data.data;
-
-                if (data.city && data.street) {
-                    setForm((prev) => ({
-                        ...prev,
-                        street: data.street,
-                        city: data.city
-                    }));
+                    if (data.city && data.street) {
+                        setForm((prev) => ({
+                            ...prev,
+                            street: data.street,
+                            city: data.city
+                        }));
+                    }
+                } else {
+                    setError("Adres niet gevonden");
                 }
             } catch (error) {
+                setError("Adres niet gevonden");
             } finally {
                 setLoadingAddress(false);
             }
@@ -59,11 +69,12 @@ function RegistrationPage( { onLogin }: Props) {
         setError("");
 
         try {
-            const response = await api.post<AccessToken>("/auth/register", form);
+            const response = await api.post<RegistrationResponse>("/auth/register", form);
 
-            if (response.data?.access_token) {
-                setAccessToken(response.data.access_token);
-                onLogin(response.data.access_token);
+            if (response.data && response.data.success && response.data.data && response.data.data.access_token) {
+                const accessToken = response.data.data.access_token;
+                setAccessToken(accessToken);
+                onLogin(accessToken);
 
                 navigate("/")
             } else {

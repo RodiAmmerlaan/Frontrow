@@ -134,3 +134,59 @@
 2025-10-22 23:27:29:2729 [31merror[39m: [31m[1761172049929-8091] Error in getAllEventsController: Failed to retrieve events[39m
 2025-10-22 23:27:29:2729 [31merror[39m: [31m[1761172049929-8091] Internal server error in getAllEventsController[39m
 2025-10-22 23:27:29:2729 [31merror[39m: [31mUnexpected error: Failed to retrieve events[39m
+2025-10-23 00:14:24:1424 [31merror[39m: [31mError in getEnrichedEvents: [39m
+[31mInvalid `this.prisma.events.findMany()` invocation in[39m
+[31mC:\Users\ammer\Documents\OELAN\FrontRow - kopie\Frontrow\backend\src\repositories\EventRepositoryImpl.ts:21:37[39m
+
+[31m  18  * @returns A promise that resolves to an array of all events[39m
+[31m  19  */[39m
+[31m  20 async findAll(): Promise<Events[]> {[39m
+[31m→ 21   return await this.prisma.events.findMany([39m
+[31merror: Environment variable not found: DATABASE_URL.[39m
+[31m  -->  schema.prisma:7[39m
+[31m   | [39m
+[31m 6 |   provider = "postgresql"[39m
+[31m 7 |   url      = env("DATABASE_URL")[39m
+[31m   | [39m
+
+[31mValidation Error Count: 1[39m
+2025-10-23 00:14:24:1424 [31merror[39m: [31m[1761174864772-591522] Error in getAllEventsController: Failed to retrieve events[39m
+2025-10-23 00:14:24:1424 [31merror[39m: [31m[1761174864772-591522] Internal server error in getAllEventsController[39m
+2025-10-23 00:14:24:1424 [31merror[39m: [31mUnexpected error: Failed to retrieve events[39m
+2025-10-23 00:14:24:1424 [31merror[39m: [31mError in getEnrichedEvents: [39m
+[31mInvalid `this.prisma.events.findMany()` invocation in[39m
+[31mC:\Users\ammer\Documents\OELAN\FrontRow - kopie\Frontrow\backend\src\repositories\EventRepositoryImpl.ts:21:37[39m
+
+[31m  18  * @returns A promise that resolves to an array of all events[39m
+[31m  19  */[39m
+[31m  20 async findAll(): Promise<Events[]> {[39m
+[31m→ 21   return await this.prisma.events.findMany([39m
+[31merror: Environment variable not found: DATABASE_URL.[39m
+[31m  -->  schema.prisma:7[39m
+[31m   | [39m
+[31m 6 |   provider = "postgresql"[39m
+[31m 7 |   url      = env("DATABASE_URL")[39m
+[31m   | [39m
+
+[31mValidation Error Count: 1[39m
+2025-10-23 00:14:24:1424 [31merror[39m: [31m[1761174864845-867204] Error in getAllEventsController: Failed to retrieve events[39m
+2025-10-23 00:14:24:1424 [31merror[39m: [31m[1761174864845-867204] Internal server error in getAllEventsController[39m
+2025-10-23 00:14:24:1424 [31merror[39m: [31mUnexpected error: Failed to retrieve events[39m
+2025-10-23 23:37:02:372 [31merror[39m: [31mError in authenticateUser: [39m
+[31mInvalid `this.prisma.users.findFirst()` invocation in[39m
+[31mC:\Users\ammer\Documents\OELAN\FrontRow - kopie\Frontrow\backend\dist\repositories\UserRepositoryImpl.js:88:40[39m
+
+[31m  85  */[39m
+[31m  86 async findByEmail(email) {[39m
+[31m  87     const normalizedEmail = email.toLowerCase().trim();[39m
+[31m→ 88     return await this.prisma.users.findFirst([39m
+[31merror: Environment variable not found: DATABASE_URL.[39m
+[31m  -->  schema.prisma:7[39m
+[31m   | [39m
+[31m 6 |   provider = "postgresql"[39m
+[31m 7 |   url      = env("DATABASE_URL")[39m
+[31m   | [39m
+
+[31mValidation Error Count: 1[39m
+2025-10-23 23:37:02:372 [31merror[39m: [31m[1761259021871-880932] Login error: Failed to authenticate user[39m
+2025-10-23 23:37:02:372 [31merror[39m: [31mUnexpected error: Failed to authenticate user[39m

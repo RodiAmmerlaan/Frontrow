@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { AuthService } from '../../services/auth.service';
-import { getRefreshCookie } from './cookie';
+import { getRefreshCookie, setRefreshCookie } from './cookie';
 import { sendUnauthorized, sendSuccess } from '../../utils/response.util';
 import Logger from '../../utils/logger';
 import { AuthenticationError } from '../../errors';
@@ -76,7 +76,6 @@ export async function refreshController(
 
         const tokens = await AuthService.refreshUserTokens(raw);
 
-        const { setRefreshCookie } = await import('./cookie');
         setRefreshCookie(response, tokens.refreshToken, 30);
         Logger.info(`[${correlationId}] Tokens refreshed successfully`);
         return sendSuccess(response, { access_token: tokens.accessToken });

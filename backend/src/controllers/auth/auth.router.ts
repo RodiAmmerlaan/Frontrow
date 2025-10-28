@@ -9,12 +9,15 @@ import { validateRequest, ValidationSchemas } from '../../middleware/validation.
 import Joi from 'joi';
 
 const loginSchema = Joi.object({
-  email: Joi.string().email().required(),
+  email: Joi.string().email({ tlds: { allow: ['test', 'com', 'org', 'net', 'nl'] } }).required(),
+
+
+  
   password: Joi.string().min(8).required()
 });
 
 const registrationSchema = Joi.object({
-  email: Joi.string().email().required(),
+  email: Joi.string().email({ tlds: { allow: ['test', 'com', 'org', 'net', 'nl'] } }).required(),
   password: Joi.string().min(8).required(),
   first_name: Joi.string().min(1).max(50).required(),
   last_name: Joi.string().min(1).max(50).required(),
@@ -26,7 +29,7 @@ const registrationSchema = Joi.object({
 
 export const authRouter = Router();
 
-authRouter.post('/login', validateRequest(loginSchema, { source: 'body', sanitize: true }), login);
+authRouter.post('/login', validateRequest(loginSchema, { source: 'body', sanitize: false }), login);
 authRouter.post('/refresh', refreshController);
 authRouter.post('/logout', logoutController);
 authRouter.post('/register', validateRequest(registrationSchema, { source: 'body', sanitize: true }), registrationController);

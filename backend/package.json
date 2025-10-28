@@ -19,6 +19,7 @@
     "@prisma/client": "^6.15.0",
     "axios": "^1.11.0",
     "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "csv-parse": "^6.1.0",
     "escape-html": "^1.0.3",
@@ -34,6 +35,7 @@
   "devDependencies": {
     "@types/axios": "^0.9.36",
     "@types/bcrypt": "^6.0.0",
+    "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",
     "@types/csv-parse": "^1.1.12",
     "@types/escape-html": "^1.0.2",

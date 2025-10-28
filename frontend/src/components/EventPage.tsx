@@ -161,7 +161,7 @@ function EventPage({accessToken}:Props) {
     async function getEvents(): Promise<Event[]> {
         return await api.get("/events")
             .then((response) => {
-                if (response.data && response.data.data && response.data.data.events) {
+                if (response.data && response.data.success && response.data.data && response.data.data.events) {
                     return response.data.data.events;
                 }
                 return [];
@@ -175,7 +175,7 @@ function EventPage({accessToken}:Props) {
     async function searchEvents(searchTerm: string): Promise<Event[]> {
         return await api.get(`/events/search?name=${encodeURIComponent(searchTerm)}`)
             .then((response) => {
-                if (response.data && response.data.data && response.data.data.events) {
+                if (response.data && response.data.success && response.data.data && response.data.data.events) {
                     return response.data.data.events;
                 }
                 return [];

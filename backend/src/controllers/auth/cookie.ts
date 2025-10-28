@@ -12,7 +12,7 @@ export function setRefreshCookie(response: Response, rawToken: string, maxAgeDay
         secure: false,
         sameSite: 'lax',
         maxAge: maxAgeDays * 24 * 60 * 60 * 1000,
-        path: '/auth'
+        path: '/'
     });
 }
 
@@ -21,7 +21,7 @@ export function setRefreshCookie(response: Response, rawToken: string, maxAgeDay
  * @param response - Express response object
  */
 export function clearRefreshCookie(response: Response) {
-    response.clearCookie('refresh_token', { path: '/auth' });
+    response.clearCookie('refresh_token', { path: '/' });
 }
 
 /**
@@ -30,5 +30,6 @@ export function clearRefreshCookie(response: Response) {
  * @returns The refresh token if found, or null if not present
  */
 export function getRefreshCookie(request: Request) {
-    return request.headers.cookie?.split("refresh_token=")[1] || null;
+    // Use Express's built-in cookie parsing instead of manual parsing
+    return request.cookies?.refresh_token || null;
 }

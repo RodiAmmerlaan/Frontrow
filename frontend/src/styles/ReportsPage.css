@@ -238,6 +238,16 @@
   box-shadow: 0 4px 12px rgba(231, 76, 60, 0.1);
 }
 
+.reports-page-error-container.authorization-error {
+  border: 2px solid #f39c12;
+  background-color: #fef9e7;
+  color: #9c5400;
+}
+
+.reports-page-error-container.authorization-error strong {
+  color: #d35400;
+}
+
 .reports-page-loading-container {
   text-align: center;
   padding: 60px 40px;

@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import { authRouter } from './controllers/auth/auth.router';
 import { eventsRouter } from './controllers/events/events.router';
 import { ordersRouter } from './controllers/orders/orders.router';
@@ -14,6 +15,7 @@ const app = express();
 const PORT = SERVER_CONFIG.PORT;
 
 app.use(correlationIdMiddleware);
+app.use(cookieParser()); // Add cookie parser middleware
 app.use(cors(
    {
         origin: SERVER_CONFIG.CORS_ORIGIN,

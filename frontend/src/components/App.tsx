@@ -10,6 +10,7 @@ import LoginPage from './LoginPage';
 import ReportsPage from './ReportsPage';
 import { Navigation } from './Navigation';
 import '../styles/App.css';
+import { getCookie } from '../utils/cookieUtils';
 
 type JwtPayload = { 
     sub: string, 
@@ -47,20 +48,26 @@ function App() {
 
   const fetchUserDetails = useCallback(async (token: string) => {
     try {
+      // Set the access token in the API utility before making the request
+      setAccessToken(token);
+      
       const response = await api.get('/auth/profile');
-      const userData = response.data;
+      // Updated to handle new response format with success/data structure
+      const userData = response.data && response.data.success && response.data.data ? response.data.data : null;
       
-      let displayName = '';
-      if (userData.first_name || userData.last_name) {
-        displayName = `${userData.first_name || ''} ${userData.last_name || ''}`.trim();
+      if (userData) {
+        let displayName = '';
+        if (userData.first_name || userData.last_name) {
+          displayName = `${userData.first_name || ''} ${userData.last_name || ''}`.trim();
+        }
+        
+        if (!displayName) {
+          const emailName = userData.email.split('@')[0];
+          displayName = emailName.charAt(0).toUpperCase() + emailName.slice(1);
+        }
+        
+        setUserName(displayName);
       }
-      
-      if (!displayName) {
-        const emailName = userData.email.split('@')[0];
-        displayName = emailName.charAt(0).toUpperCase() + emailName.slice(1);
-      }
-      
-      setUserName(displayName);
     } catch (error) {
       console.error('Error fetching user details:', error)
       const userInfo = getUserInfo(token);
@@ -84,18 +91,55 @@ function App() {
       }
     });
     
-    if (accessToken) {
-      fetchUserDetails(accessToken);
+    // Check if user is already logged in by checking for refresh token cookie
+    const hasRefreshToken = getCookie('refresh_token');
+    if (hasRefreshToken) {
+      // Try to refresh the access token
+      api.post('/auth/refresh', {}, { withCredentials: true })
+        .then(res => {
+          // Updated to handle new response format with success/data structure
+          const accessToken = res.data && res.data.success && res.data.data && res.data.data.access_token 
+            ? res.data.data.access_token 
+            : null;
+          if (accessToken) {
+            setToken(accessToken);
+            setAccessToken(accessToken);
+            fetchUserDetails(accessToken);
+          } else {
+            // If refresh fails, clear the cookie state
+            setToken(null);
+            setAccessToken(null);
+          }
+        })
+        .catch(() => {
+          // If refresh fails, clear the cookie state
+          setToken(null);
+          setAccessToken(null);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    } else {
+      setLoading(false);
     }
-    
-    setLoading(false);
-  }, [fetchUserDetails, accessToken])
+  }, [fetchUserDetails])
 
   if (loading) return <p>Laden...</p>;
 
   function logout(): void {
-    setToken(null);
-    setAccessToken(null);
+    // Call logout endpoint to clear the refresh token cookie
+    api.post('/auth/logout', {}, { withCredentials: true })
+      .then(res => {
+        // Handle the response if needed
+        if (res.data && res.data.success) {
+          console.log('Logout successful');
+        }
+      })
+      .catch(err => console.error('Logout error:', err))
+      .finally(() => {
+        setToken(null);
+        setAccessToken(null);
+      });
   }
 
   return (
@@ -122,7 +166,7 @@ function App() {
           <Route 
             path="/createEvent"
             element={
-              accessToken && getRole(accessToken) === "ADMIN" ? (
+              accessToken && getRole(accessToken) === "Admin" ? (
                 <CreateEvent />) : ( null )           
             }
           />
@@ -130,7 +174,7 @@ function App() {
           <Route 
             path="/reports"
             element={
-              accessToken && getRole(accessToken) === "ADMIN" ? (
+              accessToken && getRole(accessToken) === "Admin" ? (
                 <ReportsPage accessToken={accessToken} />) : ( null )           
             }
           />

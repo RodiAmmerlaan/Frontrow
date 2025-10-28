@@ -99,6 +99,7 @@ export class LoginController extends BaseController {
             setRefreshCookie(response, authResult.refreshToken, 30);
             Logger.info(`[${correlationId}] User logged in successfully`, { email });
             return this.sendSuccess(response, { access_token: authResult.accessToken });
+            
         } catch (error) {
             if (error instanceof ValidationError) {
                 Logger.warn(`[${correlationId}] Login validation error`, { email, error: error.message });

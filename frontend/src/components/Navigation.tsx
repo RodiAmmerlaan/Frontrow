@@ -28,7 +28,7 @@ export function Navigation({ accessToken, userName, onLogout, getRole }: Navigat
             Home
           </Link>
           
-          {accessToken && getRole(accessToken) === "ADMIN" && (
+          {accessToken && getRole(accessToken) === "Admin" && (
             <>
               <span className="app-nav-separator">|</span>
               <Link 
@@ -64,14 +64,14 @@ export function Navigation({ accessToken, userName, onLogout, getRole }: Navigat
           {!accessToken ? (
             <>
               <Link 
-                to="/Register"
+                to="/register"
                 className="app-auth-link"
               >
                 Registreren
               </Link>
               <span className="app-nav-separator">|</span>
               <Link 
-                to="/Login"
+                to="/login"
                 className="app-auth-link"
               >
                 Inloggen
@@ -81,7 +81,10 @@ export function Navigation({ accessToken, userName, onLogout, getRole }: Navigat
             <>
               <Link 
                 to="/" 
-                onClick={onLogout}
+                onClick={(e) => {
+                  e.preventDefault();
+                  onLogout();
+                }}
                 className="app-nav-link"
               >
                 Uitloggen

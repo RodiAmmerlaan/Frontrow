@@ -45,8 +45,13 @@ export function CreateEvent() {
         setLoading(true);
 
         try {
-            await api.post<Event>("/events/create", form);
-            navigate("/")
+            const response = await api.post("/events/create", form);
+            // Updated to handle new response format with success/data structure
+            if (response.data && response.data.success) {
+                navigate("/")
+            } else {
+                setError("Kan nieuw evenement niet aanmaken.");
+            }
         } catch {
             setError("Kan nieuw evenement niet aanmaken.");
         } finally {

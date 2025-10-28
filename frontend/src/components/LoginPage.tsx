@@ -7,8 +7,11 @@ interface Props {
     onLogin: (accessToken: string) => void;
 }
 
-interface AccessToken {
-    access_token: string;
+interface LoginResponse {
+    success: boolean;
+    data: {
+        access_token: string;
+    };
 }
 
 function LoginPage({ onLogin }:Props) {
@@ -19,9 +22,14 @@ function LoginPage({ onLogin }:Props) {
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const response = await api.post<AccessToken>("/auth/login", { email, password });
-            onLogin(response.data.access_token);
-            navigate("/");
+            const response = await api.post<LoginResponse>("/auth/login", { email, password });
+            if (response.data && response.data.success && response.data.data && response.data.data.access_token) {
+                const accessToken = response.data.data.access_token;
+                onLogin(accessToken);
+                navigate("/");
+            } else {
+                setError("Login mislukt, controleer je gegevens");
+            }
         } catch {
             setError("Login mislukt, controleer je gegevens");
         }

@@ -115,13 +115,28 @@ export default function ReportsPage({ accessToken }: ReportsPageProps) {
         try {
             if (activeTab === 'sales') {
                 const response = await api.get(`/events/sales-overview?month=${filters.month || ''}&year=${filters.year || ''}`);
-                setSalesData(response.data.data);
+                // Updated to handle new response format with success/data structure
+                if (response.data && response.data.success && response.data.data) {
+                    setSalesData(response.data.data);
+                } else if (response.data && !response.data.success && response.data.error === "FORBIDDEN") {
+                    setError('Access denied. Admin role required');
+                }
             } else {
                 const response = await api.get(`/events/user-purchase-report?month=${filters.month || ''}&year=${filters.year || ''}`);
-                setUserPurchaseData(response.data.data);
+                // Updated to handle new response format with success/data structure
+                if (response.data && response.data.success && response.data.data) {
+                    setUserPurchaseData(response.data.data);
+                } else if (response.data && !response.data.success && response.data.error === "FORBIDDEN") {
+                    setError('Access denied. Admin role required');
+                }
             }
         } catch (err: any) {
-            setError('Fout bij het ophalen van rapportagedata');
+            // Handle network errors or other unexpected errors
+            if (err.response && err.response.data && err.response.data.error === "FORBIDDEN") {
+                setError('Access denied. Admin role required');
+            } else {
+                setError('Fout bij het ophalen van rapportagedata');
+            }
         } finally {
             setLoading(false);
         }
@@ -145,13 +160,28 @@ export default function ReportsPage({ accessToken }: ReportsPageProps) {
         try {
             if (activeTab === 'sales') {
                 const response = await api.get(`/events/sales-overview`);
-                setSalesData(response.data.data);
+                // Updated to handle new response format with success/data structure
+                if (response.data && response.data.success && response.data.data) {
+                    setSalesData(response.data.data);
+                } else if (response.data && !response.data.success && response.data.error === "FORBIDDEN") {
+                    setError('Access denied. Admin role required');
+                }
             } else {
                 const response = await api.get(`/events/user-purchase-report`);
-                setUserPurchaseData(response.data.data);
+                // Updated to handle new response format with success/data structure
+                if (response.data && response.data.success && response.data.data) {
+                    setUserPurchaseData(response.data.data);
+                } else if (response.data && !response.data.success && response.data.error === "FORBIDDEN") {
+                    setError('Access denied. Admin role required');
+                }
             }
         } catch (err: any) {
-            setError('Fout bij het ophalen van rapportagedata');
+            // Handle network errors or other unexpected errors
+            if (err.response && err.response.data && err.response.data.error === "FORBIDDEN") {
+                setError('Access denied. Admin role required');
+            } else {
+                setError('Fout bij het ophalen van rapportagedata');
+            }
         } finally {
             setLoading(false);
         }
@@ -293,7 +323,7 @@ export default function ReportsPage({ accessToken }: ReportsPageProps) {
                 />
 
                 {error && (
-                    <div className="reports-page-error-container">
+                    <div className={`reports-page-error-container ${error.includes('Access denied') ? 'authorization-error' : ''}`}>
                         <strong>Error:</strong> {error}
                     </div>
                 )}

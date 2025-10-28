@@ -41,7 +41,9 @@ export default function EventDetailsPage({ accessToken }: Props) {
                 }
                 
                 const response = await api.get(`/events/${eventId}`);
-                const eventDetails = response.data.data.event;
+                const eventDetails = response.data && response.data.success && response.data.data && response.data.data.event 
+                    ? response.data.data.event 
+                    : null;
                 
                 if (eventDetails) {
                     setEvent(eventDetails);

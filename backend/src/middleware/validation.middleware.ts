@@ -14,18 +14,26 @@ export interface ValidationOptions {
 /**
  * Sanitizes string values to prevent XSS attacks
  * @param data - The data to sanitize
+ * @param key - The field key (to skip sanitization for email fields)
  * @returns Sanitized data
  */
-export function sanitizeData(data: any): any {
+export function sanitizeData(data: any, key?: string): any {
+  // Skip sanitization for email fields to preserve valid email format
+  if (key === 'email') {
+    return data;
+  }
+  
   if (typeof data === 'string') {
     return escapeHtml(data);
   } else if (Array.isArray(data)) {
-    return data.map(item => sanitizeData(item));
-  } else if (typeof data === 'object' && data !== null) {
+    return data.map((item, index) => sanitizeData(item, key ? `${key}[${index}]` : undefined));
+  } else if (typeof data === 'object' && data !== null && !Object.isFrozen(data)) {
+    // Check if data is a plain object and not frozen before checking hasOwnProperty
     const sanitized: any = {};
-    for (const key in data) {
-      if (data.hasOwnProperty(key)) {
-        sanitized[key] = sanitizeData(data[key]);
+    for (const objKey in data) {
+      // Use Object.prototype.hasOwnProperty.call to safely check for property existence
+      if (Object.prototype.hasOwnProperty.call(data, objKey)) {
+        sanitized[objKey] = sanitizeData(data[objKey], key ? `${key}.${objKey}` : objKey);
       }
     }
     return sanitized;
@@ -41,11 +49,29 @@ export function sanitizeData(data: any): any {
  */
 export function validateRequest(schema: ObjectSchema, options: ValidationOptions = { source: 'body' }) {
   return (request: Request, response: Response, next: NextFunction) => {
+    console.log('=== VALIDATION MIDDLEWARE CALLED ===');
+    console.log('Request method:', request.method);
+    console.log('Request URL:', request.url);
+    console.log('Request body:', request.body);
+    console.log('Request headers:', request.headers);
+    
     try {
       let data = getDataFromRequest(request, options.source);
       
-      if (options.sanitize !== false) {
-        data = sanitizeData(data);
+      console.log('Data from request:', data);
+      
+      // Only sanitize if explicitly enabled (not false)
+      if (options.sanitize === true) {
+        // For body data, we pass the data directly to sanitizeData which will handle object traversal
+        // For other sources, we sanitize as before
+        if (options.source === 'body') {
+          data = sanitizeData(data);
+        } else {
+          data = sanitizeData(data);
+        }
+        console.log('Data after sanitization:', data);
+      } else {
+        console.log('Sanitization skipped');
       }
       
       const { error, value } = schema.validate(data, { 
@@ -53,8 +79,11 @@ export function validateRequest(schema: ObjectSchema, options: ValidationOptions
         stripUnknown: options.stripUnknown ?? true
       });
       
+      console.log('Validation result - Error:', error, 'Value:', value);
+      
       if (error) {
         const errorMessage = error.details.map(detail => detail.message).join(', ');
+        console.log('Throwing validation error:', errorMessage);
         throw new ValidationError(errorMessage);
       }
       
@@ -63,8 +92,10 @@ export function validateRequest(schema: ObjectSchema, options: ValidationOptions
       }
       request.validated[options.source] = value;
       
+      console.log('Validation successful, calling next()');
       next();
     } catch (error) {
+      console.log('Validation error caught:', error);
       if (error instanceof ValidationError) {
         throw error;
       }
@@ -80,6 +111,7 @@ export function validateRequest(schema: ObjectSchema, options: ValidationOptions
  * @param source - Where to extract data from
  * @returns Data object
  */
+
 function getDataFromRequest(request: Request, source: 'body' | 'query' | 'params'): any {
   switch (source) {
     case 'body':

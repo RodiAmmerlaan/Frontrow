@@ -201,7 +201,7 @@ describe('Auth Middleware', () => {
       (mockRequest as any).user = {
         id: 'user-123',
         email: 'admin@example.com',
-        role: 'ADMIN'
+        role: 'Admin'
       };
 
       authMiddleware.authorizeAdmin(
@@ -236,7 +236,7 @@ describe('Auth Middleware', () => {
       (mockRequest as any).user = {
         id: 'user-123',
         email: 'user@example.com',
-        role: 'USER'
+        role: 'User'
       };
 
       authMiddleware.authorizeAdmin(

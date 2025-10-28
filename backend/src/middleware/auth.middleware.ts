@@ -78,7 +78,7 @@ export function authorizeAdmin(
     });
   }
   
-  if (user.role !== "ADMIN") {
+  if (user.role !== "Admin") {
     return response.status(403).json({ 
       success: false, 
       error: "FORBIDDEN", 
