@@ -62,6 +62,7 @@ docker-compose logs
 
 - Frontend: http://localhost:3001
 - Backend API: http://localhost:3000
+- Backend Swagger: http://localhost:3000/api/v1/docs
 - Database: localhost:54321 (PostgreSQL)
 
 ### Project Structure
