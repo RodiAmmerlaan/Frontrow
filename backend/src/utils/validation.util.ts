@@ -84,7 +84,6 @@ export function validateEmail(email: string | null | undefined, fieldName: strin
   }
   
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  console.log(email);
   if (!emailRegex.test(email)) {
     throw new ValidationError(`${fieldName} must be a valid email address`);
   }
