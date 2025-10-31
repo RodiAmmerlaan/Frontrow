@@ -20,13 +20,13 @@ This project includes Docker configuration for running all services:
 To start all services:
 
 ```bash
-docker-compose up --build
+docker-compose up -d
 ```
 
 To run in detached mode:
 
 ```bash
-docker-compose up --build -d
+docker-compose up -d
 ```
 
 To stop all services:
