@@ -23,12 +23,6 @@ To start all services:
 docker-compose up -d
 ```
 
-To run in detached mode:
-
-```bash
-docker-compose up -d
-```
-
 To stop all services:
 
 ```bash
