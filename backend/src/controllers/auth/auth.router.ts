@@ -29,7 +29,7 @@ const registrationSchema = Joi.object({
 
 export const authRouter = Router();
 
-authRouter.post('/login', validateRequest(loginSchema, { source: 'body', sanitize: false }), login);
+authRouter.post('/login', validateRequest(loginSchema, { source: 'body', sanitize: true }), login);
 authRouter.post('/refresh', refreshController);
 authRouter.post('/logout', logoutController);
 authRouter.post('/register', validateRequest(registrationSchema, { source: 'body', sanitize: true }), registrationController);
