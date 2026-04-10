@@ -3,9 +3,9 @@ version: '3.8'
 services:
   # PostgreSQL Database
   db:
-    image: postgres:13
+    image: postgres:15-alpine
     container_name: frontrow-db
-    restart: always
+    restart: unless-stopped
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
@@ -26,7 +26,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     container_name: frontrow-backend
-    restart: always
+    restart: unless-stopped
     ports:
       - "3000:3000"
     environment:
@@ -39,8 +39,12 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    links:
-      - db
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
   # Database Setup and Seeding Service (runs once after db is ready)
   setup-db:
@@ -69,13 +73,14 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     container_name: frontrow-frontend
-    restart: always
+    restart: unless-stopped
     ports:
       - "3001:3001"
     environment:
       - REACT_APP_BACKEND_URL=http://localhost:3000
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
 
 volumes:
   postgres_data:
