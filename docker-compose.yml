@@ -64,7 +64,7 @@ services:
         echo 'Setting up database schema...' &&
         npx prisma db push &&
         echo 'Running database seed...' &&
-        npx prisma db seed &&
+        node dist/prisma/prisma/seed.js /app/prisma/events.csv &&
         echo 'Database setup and seeding completed'"
 
   # Frontend Service

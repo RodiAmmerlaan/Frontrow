@@ -21,6 +21,9 @@ COPY src ./src/
 # Build TypeScript to JavaScript
 RUN npm run build
 
+# Also compile the seed script (after main build)
+RUN npx tsc prisma/seed.ts --outDir dist/prisma --esModuleInterop --skipLibCheck
+
 # Stage 2: Production stage
 FROM node:20-alpine AS production
 
@@ -34,6 +37,9 @@ RUN npm ci --only=production
 # Copy Prisma schema and generate client for production
 COPY prisma ./prisma/
 RUN npx prisma generate
+
+# Copy events.csv for seeding
+COPY prisma/events.csv ./prisma/events.csv
 
 # Copy built application from builder stage
 COPY --from=builder /app/dist ./dist

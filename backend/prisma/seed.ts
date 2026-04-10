@@ -59,7 +59,11 @@ async function main() {
         }
     });
 
+    Logger.info('Users created successfully');
+    
     await importEventsFromCSV();
+    
+    Logger.info('All seeding completed successfully');
 }
 
 interface CSVEvent {
@@ -111,6 +115,9 @@ async function importEventsFromCSV(csvFilePath?: string) {
         const events = parseCSV(csvContent);
 
         Logger.info(`Found ${events.length} events in CSV file`);
+
+        let successCount = 0;
+        let failCount = 0;
 
         for (const csvEvent of events) {
             try {
@@ -169,13 +176,19 @@ async function importEventsFromCSV(csvFilePath?: string) {
                     });
                 }
 
+                successCount++;
                 Logger.info(`✓ Imported event: ${csvEvent.Titel}`);
+                
+                // Small delay to prevent overwhelming the database connection
+                await new Promise(resolve => setTimeout(resolve, 50));
             } catch (eventError) {
+                failCount++;
                 Logger.error(`Error importing event "${csvEvent.Titel}":`, eventError);
+                // Continue with next event instead of failing completely
             }
         }
 
-        Logger.info('✓ CSV import completed successfully');
+        Logger.info(`✓ CSV import completed: ${successCount} succeeded, ${failCount} failed`);
     } catch (error) {
         Logger.error('Error importing events from CSV:', error);
         throw error;
