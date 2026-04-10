@@ -100,7 +100,7 @@ export class GetOrderByIdController extends BaseController {
         response: Response
     ) {
         const correlationId = (request as any).correlationId || 'N/A';
-        const { orderId } = request.params;
+        const orderId = request.params.orderId as string;
         Logger.debug(`[${correlationId}] Get order by ID controller called`, { orderId });
         
         try {

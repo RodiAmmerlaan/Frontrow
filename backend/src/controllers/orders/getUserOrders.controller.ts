@@ -105,7 +105,7 @@ export class GetUserOrdersController extends BaseController {
         response: Response
     ) {
         const correlationId = (request as any).correlationId || 'N/A';
-        const { userId } = request.params;
+        const userId = request.params.userId as string;
         Logger.debug(`[${correlationId}] Get user orders controller called`, { userId });
         
         try {

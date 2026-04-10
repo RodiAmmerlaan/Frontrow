@@ -196,7 +196,7 @@ export async function validateRefreshtoken(userId: string, rawToken: string) {
     });
     
     const allTokens = await prisma.refreshToken.findMany();
-    const tokens = allTokens.filter(token => 
+    const tokens = allTokens.filter((token: any) => 
         token.user_id === userId && 
         !token.revokedat && 
         token.expiresat && token.expiresat > new Date()
