@@ -30,6 +30,11 @@ app.use('/api/v1/orders', ordersRouter);
 app.use('/api/v1/addressCheck', addressCheckRouter);
 app.use('/api/v1/docs', openApiRouter);
 
+// Health check endpoint
+app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
 app.use(errorHandler);
 
 app.listen(PORT, () => {
