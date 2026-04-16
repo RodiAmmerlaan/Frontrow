@@ -15,25 +15,39 @@ This project includes Docker configuration for running all services:
 - Docker
 - Docker Compose
 
+### First time using the application
+
+Before starting Docker, the applications need to be installed first. This is a one-time action.
+
+In both folders `backend` and `frontend`, run the following command:
+
+```bash
+npm install
+```
+
+This will generate a package-lock.json file in both folders.
+
 ### Running the Application
 
 To start all services:
 
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 To stop all services:
 
 ```bash
-docker-compose down
+docker compose down
 ```
 
 To view logs:
 
 ```bash
-docker-compose logs
+docker compose logs
 ```
+
+After the first time running docker compose, the application wil appear in Docker Desktop and will start automatically when it is opened.
 
 ### Services Overview
 
@@ -58,6 +72,16 @@ docker-compose logs
 - Backend API: http://localhost:3000
 - Backend Swagger: http://localhost:3000/api/v1/docs
 - Database: localhost:54321 (PostgreSQL)
+
+#### Users
+
+You can create your own regular user. There are by default two accounts available:
+
+Administrator: admin@frontrow.test
+Password: Admin123!
+
+User: user@user.test
+Password: User123!
 
 ### Project Structure
 
