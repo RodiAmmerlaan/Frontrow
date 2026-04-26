@@ -162,12 +162,19 @@ const options: Options = {
       },
     ],
   },
-  apis: [
-    './src/controllers/auth/*.controller.ts',
-    './src/controllers/events/*.controller.ts',
-    './src/controllers/orders/*.controller.ts',
-    './src/controllers/*.controller.ts',
-  ],
+  apis: process.env.NODE_ENV === 'production'
+    ? [
+        './dist/controllers/auth/*.controller.js',
+        './dist/controllers/events/*.controller.js',
+        './dist/controllers/orders/*.controller.js',
+        './dist/controllers/*.controller.js',
+      ]
+    : [
+        './src/controllers/auth/*.controller.ts',
+        './src/controllers/events/*.controller.ts',
+        './src/controllers/orders/*.controller.ts',
+        './src/controllers/*.controller.ts',
+      ],
 };
 
 export default options;
